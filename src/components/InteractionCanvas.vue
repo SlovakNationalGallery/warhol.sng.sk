@@ -35,8 +35,18 @@ onMounted(() => {
 
     p5.mouseDragged = () => {
       if (STENCIL.isDragging) {
-        STENCIL.posX = p5.mouseX - STENCIL.offSetX;
-        STENCIL.posY = p5.mouseY - STENCIL.offSetY;
+        if (
+          p5.mouseX > STENCIL.width / 2 &&
+          p5.mouseX < P5_CANVAS.width - (STENCIL.width - STENCIL.offSetX) / 2
+        ) {
+          STENCIL.posX = p5.mouseX - STENCIL.offSetX;
+        }
+        if (
+          p5.mouseY > STENCIL.height / 2 &&
+          p5.mouseY < P5_CANVAS.height - (STENCIL.height - STENCIL.offSetY) / 2
+        ) {
+          STENCIL.posY = p5.mouseY - STENCIL.offSetY;
+        }
       }
     };
 

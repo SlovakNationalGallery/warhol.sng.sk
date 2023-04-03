@@ -1,5 +1,5 @@
 <template>
-  <div id="interaction-canvas"></div>
+  <div id="interaction-canvas" class="w-96 h-96"></div>
 </template>
 
 <script setup>
@@ -11,8 +11,8 @@ onMounted(() => {
   const P5 = require("p5");
   const script = function (p5) {
     const P5_CANVAS = {
-      width: 800,
-      height: 800
+      width: document.getElementById('interaction-canvas').offsetWidth,
+      height: document.getElementById('interaction-canvas').offsetHeight
     }
 
     const SCREEN_PRINT_CANVAS = {

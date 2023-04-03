@@ -1,5 +1,5 @@
 <template>
-  <div id="interaction-canvas" class="w-96 h-96"></div>
+  <div id="interaction-canvas" class="w-[50rem] h-[50rem]"></div>
 </template>
 
 <script setup>

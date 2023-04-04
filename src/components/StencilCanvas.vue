@@ -1,5 +1,5 @@
 <template>
-  <div id="interaction-canvas" class="w-96 h-96"></div>
+  <div id="stencil-canvas" class="w-96 h-96"></div>
 </template>
 
 <script setup>
@@ -10,9 +10,9 @@ onMounted(() => {
   const P5 = require("p5");
   const script = function (p5) {
     const P5_CANVAS = {
-      width: document.getElementById('interaction-canvas').offsetWidth,
-      height: document.getElementById('interaction-canvas').offsetHeight
-    }
+      width: document.getElementById("stencil-canvas").offsetWidth,
+      height: document.getElementById("stencil-canvas").offsetHeight,
+    };
 
     const SCREEN_PRINT_CANVAS = {
       width: 200,
@@ -74,7 +74,7 @@ onMounted(() => {
     // NOTE: Set up is here
     p5.setup = () => {
       const canvas = p5.createCanvas(P5_CANVAS.width, P5_CANVAS.height);
-      canvas.parent("interaction-canvas");
+      canvas.parent("stencil-canvas");
     };
 
     p5.draw = () => {

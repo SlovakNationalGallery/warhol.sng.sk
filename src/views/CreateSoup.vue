@@ -5,6 +5,7 @@
     </h1>
     <PaintCanvas />
     <StencilCanvas />
+    <LabelCanvas />
     <router-link
       to="/"
       class="px-6 py-2 text-sm text-green-100 bg-indigo-600 rounded"
@@ -15,4 +16,5 @@
 <script setup>
 import StencilCanvas from "../components/StencilCanvas.vue";
 import PaintCanvas from "../components/PaintCanvas.vue";
+import LabelCanvas from "../components/LabelCanvas.vue";
 </script>

@@ -12,9 +12,15 @@ module.exports = {
         wall: {
           DEFAULT: "#F2F0EA",
         },
+        red: {
+          DEFAULT: "#B43244",
+        },
       },
       dropShadow: {
         "3xl": "-4px 18px 32px rgba(87, 81, 64, 0.14)",
+      },
+      screens: {
+        "2xl": "1800px",
       },
     },
   },

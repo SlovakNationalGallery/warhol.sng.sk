@@ -7,10 +7,10 @@
     </div>
     <router-link
       to="/create-soup"
-      class="px-4 py-4 xl:py-8 text-white bg-black text-2xl font-medium block text-center w-100 absolute inset-x-0 bottom-0"
+      class="font-sng px-4 py-4 xl:py-8 text-white bg-black text-6xl font-medium block text-center w-100 absolute inset-x-0 bottom-0"
     >
-      Create your own can of soup
-      <svg width="63" height="52" viewBox="0 0 63 52" class="w-8 h-auto fill-none stroke-white inline-block ml-2">
+      Vytvor si vlastnú polievku
+      <svg width="63" height="52" viewBox="0 0 63 52" class="w-14 h-auto fill-none stroke-white inline-block ml-2">
         <path d="M0 26H59" stroke-width="6" />
         <path d="M35 49L58 26L35 3" stroke-width="6" />
       </svg>

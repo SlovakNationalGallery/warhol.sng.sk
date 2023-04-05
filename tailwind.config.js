@@ -1,7 +1,13 @@
+const defaultTheme = require("tailwindcss/defaultTheme")
+
 module.exports = {
   content: ["./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Inter", ...defaultTheme.fontFamily.sans],
+        sng: ["SNG Sans", ...defaultTheme.fontFamily.sans],
+      },
       colors: {
         wall: {
           DEFAULT: "#F2F0EA",
@@ -13,4 +19,4 @@ module.exports = {
     },
   },
   plugins: [],
-};
+}

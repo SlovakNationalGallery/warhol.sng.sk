@@ -1,0 +1,64 @@
+/* SNG Sans Light */
+@font-face {
+    font-family: "SNG Sans";
+    src: url("./assets/fonts/sng-sans/SNGSans-Light.woff2") format("woff2");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SNG Sans";
+    src: url("./assets/fonts/sng-sans/SNGSans-LightItalic.woff2")
+    format("woff2");
+    font-weight: 300;
+    font-style: italic;
+}
+
+/* SNG Sans Regular */
+@font-face {
+    font-family: "SNG Sans";
+    src: url("./assets/fonts/sng-sans/SNGSans-Regular.woff2")
+    format("woff2");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SNG Sans";
+    src: url("./assets/fonts/sng-sans/SNGSans-RegularItalic.woff2")
+    format("woff2");
+    font-weight: normal;
+    font-style: italic;
+}
+
+/* SNG Sans Medium */
+@font-face {
+    font-family: "SNG Sans";
+    src: url("./assets/fonts/sng-sans/SNGSans-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SNG Sans";
+    src: url("./assets/fonts/sng-sans/SNGSans-MediumItalic.woff2")
+    format("woff2");
+    font-weight: 500;
+    font-style: italic;
+}
+
+/* SNG Sans Bold */
+@font-face {
+    font-family: "SNG Sans";
+    src: url("./assets/fonts/sng-sans/SNGSans-Bold.woff2") format("woff2");
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SNG Sans";
+    src: url("./assets/fonts/sng-sans/SNGSans-BoldItalic.woff2")
+    format("woff2");
+    font-weight: bold;
+    font-style: italic;
+}

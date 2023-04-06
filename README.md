@@ -15,6 +15,11 @@ npm run serve
 npm run build
 ```
 
+### Build windows executable
+```
+npm run electron:build -- --win --x64
+```
+
 ### Lints and fixes files
 ```
 npm run lint

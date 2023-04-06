@@ -24,7 +24,7 @@ onMounted(() => {
       posY: (P5_CANVAS.height - 325) / 2,
     }
 
-    class Rectangle {
+    class DraggableItem {
       constructor({ x, y, width, height, fill }) {
         this.x = x
         this.y = y
@@ -69,7 +69,7 @@ onMounted(() => {
       }
     }
 
-    class Label extends Rectangle {
+    class Label extends DraggableItem {
       constructor({ x, y, width, height, fill, text }) {
         super({ x, y, width, height, fill })
         this.text = text
@@ -86,7 +86,7 @@ onMounted(() => {
       }
     }
 
-    class Squeege extends Rectangle {
+    class Squeege extends DraggableItem {
       constructor({ colorFill }) {
         super({ x: 0, y: 0, width: P5_CANVAS.width, height: 20, fill: 255 })
         this.colorFill = colorFill
@@ -112,7 +112,7 @@ onMounted(() => {
       }
     }
 
-    const rect = new Rectangle({ x: 0, y: 0, width: 100, height: 200, fill: 100 })
+    const rect = new DraggableItem({ x: 0, y: 0, width: 100, height: 200, fill: 100 })
     const squeege = new Squeege({ colorFill: 120 })
     const label = new Label({ x: 100, y: 100, width: 100, height: 100, fill: 200, text: "Bean Soup" })
 

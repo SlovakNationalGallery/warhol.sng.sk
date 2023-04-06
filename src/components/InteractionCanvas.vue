@@ -31,7 +31,6 @@ onMounted(() => {
         this.width = width
         this.height = height
         this.fill = fill
-        this.isOver = false
         this.isDragging = false
       }
       display() {
@@ -58,21 +57,14 @@ onMounted(() => {
           }
         }
       }
-      mousePressed() {
-        if (this.isOver) {
+      touchStarted() {
+        if (p5.mouseX > this.x && p5.mouseX < this.x + this.width && p5.mouseY > this.y && p5.mouseY < this.y + this.height) {
           this.offSetX = p5.mouseX - this.x
           this.offSetY = p5.mouseY - this.y
           this.isDragging = true
         }
       }
-      mouseMoved() {
-        if (p5.mouseX > this.x && p5.mouseX < this.x + this.width && p5.mouseY > this.y && p5.mouseY < this.y + this.height) {
-          this.isOver = true
-        } else {
-          this.isOver = false
-        }
-      }
-      mouseReleased() {
+      touchEnded() {
         this.isDragging = false
       }
     }
@@ -130,22 +122,16 @@ onMounted(() => {
       label.mouseDragged()
     }
 
-    p5.mouseMoved = () => {
-      rect.mouseMoved()
-      squeege.mouseMoved()
-      label.mouseMoved()
+    p5.touchStarted = () => {
+      rect.touchStarted()
+      squeege.touchStarted()
+      label.touchStarted()
     }
 
-    p5.mousePressed = () => {
-      rect.mousePressed()
-      squeege.mousePressed()
-      label.mousePressed()
-    }
-
-    p5.mouseReleased = () => {
-      rect.mouseReleased()
-      squeege.mouseReleased()
-      label.mouseReleased()
+    p5.touchEnded = () => {
+      rect.touchEnded()
+      squeege.touchEnded()
+      label.touchEnded()
     }
 
     // NOTE: Set up is here

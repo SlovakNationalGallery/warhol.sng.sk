@@ -5,18 +5,13 @@
     </div>
     <div class="p-8 lg:p-16 lg:w-2/5 min-h-screen bg-wall relative">
       <div class="mb-5 text-xl">
-        krok <b>{{ step }} / 5</b>
+        krok <b>{{ step }} / {{ stepCount }}</b>
       </div>
       <svg class="w-100 h-auto fill-none stroke-black stroke-[4px] mb-8 lg:mb-16" viewBox="0 0 660 24">
-        <circle cx="12" cy="12" r="10" :class="{ 'fill-black': step > 0 }" />
-        <path d="M24 12H159" />
-        <circle cx="171" cy="12" r="10" :class="{ 'fill-black': step > 1 }" />
-        <path d="M183 12H318" />
-        <circle cx="330" cy="12" r="10" :class="{ 'fill-black': step > 2 }" />
-        <path d="M342 12H477" />
-        <circle cx="489" cy="12" r="10" :class="{ 'fill-black': step > 3 }" />
-        <path d="M501 12H636" />
-        <circle cx="648" cy="12" r="10" :class="{ 'fill-black': step > 4 }" />
+        <g v-for="(index, value) in stepCount" :key="index">
+          <circle :cx="12 + 159 * value" cy="12" r="10" :class="{ 'fill-black': step > value }" />
+          <path :d="'M' + (24 + 159 * value) + ' 12H' + (159 + 159 * value)" />
+        </g>
       </svg>
       <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">Prilož a zarovnaj šablonu</h1>
       <div class="text-xl pb-20">
@@ -61,6 +56,7 @@ import StencilCanvas from "../components/StencilCanvas.vue"
 
 const step = ref(1)
 const router = useRouter()
+const stepCount = 5
 
 const nextStep = () => {
   step.value += 1

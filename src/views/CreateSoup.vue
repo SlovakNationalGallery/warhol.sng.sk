@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full bg-wall lg:flex">
     <div class="lg:h-full bg-white lg:w-3/5">
-      <StencilCanvas class="mx-auto" />
+      <InteractionCanvas class="mx-auto"/>
     </div>
     <div class="p-8 lg:p-16 lg:w-2/5 min-h-screen bg-wall relative">
       <div class="mb-5 text-xl">
@@ -52,7 +52,7 @@
 <script setup>
 import { ref } from "vue"
 import { useRouter } from "vue-router"
-import StencilCanvas from "../components/StencilCanvas.vue"
+import InteractionCanvas from "../components/IntercationCanvas.vue";
 
 const step = ref(1)
 const router = useRouter()

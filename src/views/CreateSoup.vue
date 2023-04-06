@@ -52,7 +52,7 @@
 <script setup>
 import { ref } from "vue"
 import { useRouter } from "vue-router"
-import InteractionCanvas from "../components/IntercationCanvas.vue";
+import InteractionCanvas from "../components/InteractionCanvas.vue";
 
 const step = ref(1)
 const router = useRouter()

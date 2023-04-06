@@ -1,13 +1,13 @@
 <template>
-  <div class="w-full h-full bg-wall xl:flex">
-    <div class="xl:h-full bg-white xl:w-3/5">
+  <div class="w-full h-full bg-wall lg:flex">
+    <div class="lg:h-full bg-white lg:w-3/5">
       <StencilCanvas class="mx-auto" />
     </div>
-    <div class="p-16 xl:w-2/5 min-h-screen relative">
+    <div class="p-8 lg:p-16 lg:w-2/5 min-h-screen bg-wall relative">
       <div class="mb-5 text-xl">
         krok <b>{{ step }} / 5</b>
       </div>
-      <svg class="w-100 h-auto fill-none stroke-black stroke-[4px] mb-16" viewBox="0 0 660 24">
+      <svg class="w-100 h-auto fill-none stroke-black stroke-[4px] mb-8 lg:mb-16" viewBox="0 0 660 24">
         <circle cx="12" cy="12" r="10" :class="{ 'fill-black': step > 0 }" />
         <path d="M24 12H159" />
         <circle cx="171" cy="12" r="10" :class="{ 'fill-black': step > 1 }" />
@@ -18,8 +18,8 @@
         <path d="M501 12H636" />
         <circle cx="648" cy="12" r="10" :class="{ 'fill-black': step > 4 }" />
       </svg>
-      <h1 class="mb-8 text-2xl xl:text-5xl font-bold font-sng">Prilož a zarovnaj šablonu</h1>
-      <div class="text-xl">
+      <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">Prilož a zarovnaj šablonu</h1>
+      <div class="text-xl pb-20">
         <p class="mb-4">
           Text o tomto kroku. Keď spomínam Andyho Warhola isto sa vám vybavia plagáty s paradajkovou polievkou, či známe farebné portréty
           krásnej pani Marilyn. Mnoho Andyho diel bolo vytvorených práve technikou sieťotlače. Ako však sieťotlačovať Keď spomínam Andyho
@@ -33,7 +33,7 @@
           bolo vytvorených práve technikou sieťotlače. Ako však sieťotlačovať
         </p>
       </div>
-      <div class="bottom-0 absolute inset-x-0 flex justify-between p-16">
+      <div class="bottom-0 absolute inset-x-0 flex justify-between p-8 lg:p-16">
         <button :onClick="prevStep" class="uppercase font-sng font-medium text-black bg-wall rounded-full text-2xl py-4 px-10 flex">
           <svg class="h-[27px] w-[23px] fill-black mr-3" viewBox="0 0 27 23">
             <path

@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full bg-wall lg:flex">
     <div class="lg:h-full bg-white lg:w-3/5">
-      <InteractionCanvas class="mx-auto" />
+      <InteractionCanvas :step="step - 1" :step-count="stepCount"/>
     </div>
     <div class="p-8 lg:p-16 lg:w-2/5 min-h-screen bg-wall relative">
       <div class="mb-5 text-xl">

@@ -1,12 +1,23 @@
 <template>
   <div id="stencil-canvas" class="w-96 h-96"></div>
   <!-- TODO: Write straigth on screen -->
-  <input v-model="labelString" placeholder="Name your soup" />
+  <input v-if="stepCount - 1 === currentStep" v-model="labelString" placeholder="Name your soup" />
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue"
+import { onMounted, ref, reactive, defineProps } from "vue"
+
+const STORY_STEP = {
+  PAINT: "paint",
+  STENCIL: "stencil",
+  LABEL: "label",
+}
+
 const labelString = ref("")
+const props = defineProps(["currentStep", "stepCount"])
+const state = reactive({
+  story: [],
+})
 
 onMounted(() => {
   // NOTE: Use p5 as an instance mode
@@ -75,6 +86,7 @@ onMounted(() => {
         this.text = text
       }
       display() {
+        this.text = labelString.value
         p5.stroke("red")
         p5.strokeWeight(4)
         p5.fill(this.fill)
@@ -112,26 +124,39 @@ onMounted(() => {
       }
     }
 
-    const rect = new DraggableItem({ x: 0, y: 0, width: 100, height: 200, fill: 100 })
-    const squeege = new Squeege({ colorFill: 120 })
-    const label = new Label({ x: 100, y: 100, width: 100, height: 100, fill: 200, text: "Bean Soup" })
+    state.story = [
+      {
+        story_step: STORY_STEP.STENCIL,
+        shape: new DraggableItem({ x: 0, y: 0, width: 100, height: 200, fill: 100 }),
+      },
+      {
+        story_step: STORY_STEP.PAINT,
+        shape: new Squeege({ colorFill: 120 }),
+      },
+      {
+        story_step: STORY_STEP.STENCIL,
+        shape: new DraggableItem({ x: 0, y: 0, width: 100, height: 200, fill: 100 }),
+      },
+      {
+        story_step: STORY_STEP.PAINT,
+        shape: new Squeege({ colorFill: 120 }),
+      },
+      {
+        story_step: STORY_STEP.LABEL,
+        shape: new Label({ x: 100, y: 100, width: 100, height: 100, fill: 200, text: "Bean Soup" }),
+      },
+    ]
 
     p5.mouseDragged = () => {
-      rect.mouseDragged()
-      squeege.mouseDragged()
-      label.mouseDragged()
+      state.story[props.currentStep].shape.mouseDragged()
     }
 
     p5.touchStarted = () => {
-      rect.touchStarted()
-      squeege.touchStarted()
-      label.touchStarted()
+      state.story[props.currentStep].shape.touchStarted()
     }
 
     p5.touchEnded = () => {
-      rect.touchEnded()
-      squeege.touchEnded()
-      label.touchEnded()
+      state.story[props.currentStep].shape.touchEnded()
     }
 
     // NOTE: Set up is here
@@ -144,10 +169,12 @@ onMounted(() => {
       p5.background(220)
       p5.fill(255)
       p5.rect(SCREEN_PRINT_CANVAS.posX, SCREEN_PRINT_CANVAS.posY, SCREEN_PRINT_CANVAS.width, SCREEN_PRINT_CANVAS.height)
-      rect.display()
-      squeege.display()
-      label.text = labelString.value
-      label.display()
+      state.story.map((item, index) => {
+        if (item.story_step === STORY_STEP.STENCIL && index < props.currentStep) {
+          item.shape.display()
+        }
+      })
+      state.story[props.currentStep].shape.display()
     }
   }
   new P5(script)

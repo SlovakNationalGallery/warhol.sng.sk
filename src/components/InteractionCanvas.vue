@@ -1,7 +1,7 @@
 <template>
   <div id="stencil-canvas" class="w-96 h-96"></div>
   <!-- TODO: Write straigth on screen -->
-  <input v-if="stepCount - 1 === step" v-model="labelString" placeholder="Name your soup" />
+  <input v-if="stepCount - 1 === currentStep" v-model="labelString" placeholder="Name your soup" />
 </template>
 
 <script setup>
@@ -14,9 +14,9 @@ const STORY_STEP = {
 }
 
 const labelString = ref("")
-const props = defineProps(["step", "stepCount"])
+const props = defineProps(["currentStep", "stepCount"])
 const state = reactive({
-  story: []
+  story: [],
 })
 
 onMounted(() => {
@@ -148,15 +148,15 @@ onMounted(() => {
     ]
 
     p5.mouseDragged = () => {
-      state.story[props.step].shape.mouseDragged()
+      state.story[props.currentStep].shape.mouseDragged()
     }
 
     p5.touchStarted = () => {
-      state.story[props.step].shape.touchStarted()
+      state.story[props.currentStep].shape.touchStarted()
     }
 
     p5.touchEnded = () => {
-      state.story[props.step].shape.touchEnded()
+      state.story[props.currentStep].shape.touchEnded()
     }
 
     // NOTE: Set up is here
@@ -170,11 +170,11 @@ onMounted(() => {
       p5.fill(255)
       p5.rect(SCREEN_PRINT_CANVAS.posX, SCREEN_PRINT_CANVAS.posY, SCREEN_PRINT_CANVAS.width, SCREEN_PRINT_CANVAS.height)
       state.story.map((item, index) => {
-        if (item.story_step === STORY_STEP.STENCIL && index < props.step) {
+        if (item.story_step === STORY_STEP.STENCIL && index < props.currentStep) {
           item.shape.display()
         }
       })
-      state.story[props.step].shape.display()
+      state.story[props.currentStep].shape.display()
     }
   }
   new P5(script)

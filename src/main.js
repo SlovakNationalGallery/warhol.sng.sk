@@ -1,10 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router"
 // import VueRouter from "vue-router";
-import HomeScreen from "./views/HomeScreen.vue";
-import CreateSoup from "./views/CreateSoup.vue";
-import "./app.css";
+import HomeScreen from "./views/HomeScreen.vue"
+import CreateSoup from "./views/CreateSoup.vue"
+import "./app.css"
 
 const routes = [
   {
@@ -15,12 +15,12 @@ const routes = [
     component: CreateSoup,
     path: "/create-soup",
   },
-];
+]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
-});
+})
 
 const app = createApp(App);
 app.use(router);

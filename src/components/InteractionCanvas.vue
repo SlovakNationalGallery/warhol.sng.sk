@@ -1,5 +1,5 @@
 <template>
-  <div id="stencilCanvas" ref="sketchContainer" class="w-96 h-96"></div>
+  <div id="stencilCanvas" ref="sketchContainer" class="w-full h-full min-h-[500px]"></div>
   <!-- TODO: Write straigth on screen -->
   <input v-if="stepCount - 1 === currentStep" v-model="labelString" placeholder="Name your soup" />
 </template>
@@ -13,6 +13,11 @@ const STORY_STEP = {
   PAINT: "paint",
   STENCIL: "stencil",
   LABEL: "label",
+}
+
+const CAN = {
+  width: 800,
+  height: 519,
 }
 
 const labelString = ref("")
@@ -34,10 +39,8 @@ onMounted(() => {
     }
 
     const SCREEN_PRINT_CANVAS = {
-      width: 200,
-      height: 325,
-      posX: (P5_CANVAS.width - 200) / 2,
-      posY: (P5_CANVAS.height - 325) / 2,
+      width: (CAN.height/CAN.width) * (P5_CANVAS.height - P5_CANVAS.width/6),
+      height: P5_CANVAS.height - P5_CANVAS.width/6,
     }
 
     class DraggableItem {
@@ -247,7 +250,7 @@ onMounted(() => {
       p5.clear()
       p5.background(220)
       p5.fill(255)
-      p5.rect(SCREEN_PRINT_CANVAS.posX, SCREEN_PRINT_CANVAS.posY, SCREEN_PRINT_CANVAS.width, SCREEN_PRINT_CANVAS.height)
+      p5.rect((p5.width - SCREEN_PRINT_CANVAS.width)/2, (p5.height - SCREEN_PRINT_CANVAS.height)/2, SCREEN_PRINT_CANVAS.width, SCREEN_PRINT_CANVAS.height)
       state.story.map((item, index) => {
         if (item.story_step === STORY_STEP.STENCIL && index < props.currentStep - 1) {
           item.shape.display()

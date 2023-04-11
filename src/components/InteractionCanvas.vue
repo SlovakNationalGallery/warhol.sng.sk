@@ -140,7 +140,7 @@ onMounted(() => {
         this.stencil = stencil
         this.fill = 255
         this.colorFill = colorFill
-        this.height = 10
+        this.height = 70
         this.progress = 0
         this.printedHeight = 0
       }
@@ -154,7 +154,7 @@ onMounted(() => {
           p5.mouseX > this.stencil.x &&
           p5.mouseX < this.stencil.x + this.stencil.width &&
           p5.mouseY > this.stencil.y &&
-          p5.mouseY < this.stencil.y + this.stencil.height
+          p5.mouseY < this.stencil.y + this.stencil.height + this.height
         ) {
           this.offSetY = p5.mouseY - (this.stencil.y + this.progress)
           this.isDragging = true
@@ -168,8 +168,8 @@ onMounted(() => {
           const newPosY = p5.mouseY - this.offSetY
           if (newPosY < this.stencil.y) {
             this.progress = 0
-          } else if (newPosY + this.height > this.stencil.y + this.stencil.height) {
-            this.progress = this.stencil.height - this.height
+          } else if (newPosY > this.stencil.y + this.stencil.height) {
+            this.progress = this.stencil.height
           } else {
             this.progress = newPosY - this.stencil.y
             if (this.progress > this.printedHeight) {
@@ -184,10 +184,23 @@ onMounted(() => {
         p5.noStroke()
         p5.fill(this.colorFill)
         p5.rect(this.stencil.x, this.stencil.y, this.stencil.width, this.printedHeight)
-        p5.stroke(0)
+        //handle
         this.colorFill.setAlpha(255)
         p5.fill(this.colorFill)
         p5.rect(this.stencil.x, this.stencil.y + this.progress, this.stencil.width, this.height)
+        p5.fill(0)
+        const bladeSize = this.height * 0.75
+        p5.rect(this.stencil.x, this.stencil.y + this.progress, this.stencil.width, bladeSize)
+        p5.fill(0)
+        const handleSize = bladeSize * 1.2
+        p5.rect(this.stencil.x + (this.stencil.width/2) - handleSize/2, this.stencil.y + this.progress, handleSize, handleSize, handleSize / 7)
+        const circleSize = handleSize * 0.65
+        p5.fill(this.colorFill)
+        p5.rect(this.stencil.x + (this.stencil.width/2) - circleSize/2, this.stencil.y + this.progress + (handleSize-circleSize)/2, circleSize, circleSize, circleSize)
+        p5.fill(0)
+        p5.textSize(28)
+        p5.textAlign(p5.CENTER, p5.TOP)
+        p5.text('↓', this.stencil.x + this.stencil.width/2, this.stencil.y + this.progress + (handleSize-circleSize)/1.2)
       }
     }
 

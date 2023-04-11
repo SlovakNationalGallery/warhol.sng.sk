@@ -39,8 +39,8 @@ onMounted(() => {
     }
 
     const SCREEN_PRINT_CANVAS = {
-      width: (CAN.height/CAN.width) * (P5_CANVAS.height - P5_CANVAS.width/6),
-      height: P5_CANVAS.height - P5_CANVAS.width/6,
+      width: (CAN.height / CAN.width) * (P5_CANVAS.height - P5_CANVAS.width / 6),
+      height: P5_CANVAS.height - P5_CANVAS.width / 6,
     }
 
     class DraggableItem {
@@ -192,8 +192,8 @@ onMounted(() => {
         width: 100,
         height: 200,
         fill: 100,
-        image: p5.loadImage(require('@/assets/can/0_red.png')),
-        stencilImage: p5.loadImage(require('@/assets/can/0_red_stencil.png')),
+        image: p5.loadImage(require("@/assets/can/0_red.png")),
+        stencilImage: p5.loadImage(require("@/assets/can/0_red_stencil.png")),
       })
       const blackStencil = new Stencil({
         x: 0,
@@ -201,8 +201,8 @@ onMounted(() => {
         width: 100,
         height: 200,
         fill: 100,
-        image: p5.loadImage(require('@/assets/can/4_black.png')),
-        stencilImage: p5.loadImage(require('@/assets/can/4_black_stencil.png')),
+        image: p5.loadImage(require("@/assets/can/4_black.png")),
+        stencilImage: p5.loadImage(require("@/assets/can/4_black_stencil.png")),
       })
 
       state.story = [
@@ -248,14 +248,12 @@ onMounted(() => {
 
     p5.draw = () => {
       p5.clear()
-      p5.background(220)
-      p5.fill(255)
-      p5.rect((p5.width - SCREEN_PRINT_CANVAS.width)/2, (p5.height - SCREEN_PRINT_CANVAS.height)/2, SCREEN_PRINT_CANVAS.width, SCREEN_PRINT_CANVAS.height)
+      p5.background(255)
+      p5.showPrintMarkers()
       state.story.map((item, index) => {
         if (item.story_step === STORY_STEP.STENCIL && index < props.currentStep - 1) {
           item.shape.display()
-        } 
-        else if (item.story_step === STORY_STEP.PAINT && index == props.currentStep - 1) {
+        } else if (item.story_step === STORY_STEP.PAINT && index == props.currentStep - 1) {
           item.shape.stencil.setPrinted()
         }
       })
@@ -264,6 +262,31 @@ onMounted(() => {
         prevStep = props.currentStep
       }
       state.story[props.currentStep].shape.display()
+    }
+
+    p5.showPrintMarkers = () => {
+      p5.fill(255)
+      p5.stroke(0)
+      const offset = 30
+      p5.rect(
+        (p5.width - SCREEN_PRINT_CANVAS.width) / 2,
+        (p5.height - SCREEN_PRINT_CANVAS.height) / 2,
+        SCREEN_PRINT_CANVAS.width,
+        SCREEN_PRINT_CANVAS.height
+      )
+      p5.noStroke()
+      p5.rect(
+        (p5.width - SCREEN_PRINT_CANVAS.width) / 2 + offset / 2,
+        (p5.height - SCREEN_PRINT_CANVAS.height) / 2 - offset / 2,
+        SCREEN_PRINT_CANVAS.width - offset,
+        SCREEN_PRINT_CANVAS.height + offset
+      )
+      p5.rect(
+        (p5.width - SCREEN_PRINT_CANVAS.width) / 2 - offset / 2,
+        (p5.height - SCREEN_PRINT_CANVAS.height) / 2 + offset / 2,
+        SCREEN_PRINT_CANVAS.width + offset,
+        SCREEN_PRINT_CANVAS.height - offset
+      )
     }
   }
   new p5(script, sketchContainer.value)

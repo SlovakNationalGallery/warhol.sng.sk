@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full bg-wall lg:flex">
     <div class="lg:h-full bg-white lg:w-3/5">
-      <InteractionCanvas :current-step="currentStep" :step-count="stepCount" />
+      <InteractionCanvas :current-step="currentStep" :step-count="stepCount" :label-string="labelString" />
     </div>
     <div class="p-8 lg:p-16 lg:w-2/5 min-h-screen bg-wall relative">
       <div class="mb-5 text-xl">
@@ -15,6 +15,8 @@
       </svg>
       <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">{{ steps[currentStep].title }}</h1>
       <div class="text-xl pb-20">
+        <input v-if="stepCount - 1 === currentStep"  v-model="labelString" class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4" type="text" placeholder="Enter text">
+
         <p class="mb-4">
           {{ steps[currentStep].description }}
         </p>
@@ -45,6 +47,7 @@ import { ref } from "vue"
 import { useRouter } from "vue-router"
 import InteractionCanvas from "../components/InteractionCanvas.vue"
 
+const labelString = ref('');
 const currentStep = ref(0)
 const router = useRouter()
 const stepCount = 5
@@ -67,9 +70,13 @@ const steps = [
     description: "This is the third step",
   },
   {
-    title: "Hotovo?",
-    description: "This is the third step",
+    title: "Ako sa bude volať?",
+    description: "Andy Warhol dopisoval názvy polievok ručne. Každá sa volala inak. Pravdepodobne ich všetky dobre poznal. Konzumloval ich totiž každý deň.",
   },
+  // {
+  //   title: "Hotovo?",
+  //   description: "This is the third step",
+  // },
 ]
 
 const nextStep = () => {

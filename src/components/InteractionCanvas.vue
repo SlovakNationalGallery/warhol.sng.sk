@@ -1,7 +1,5 @@
 <template>
   <div id="stencilCanvas" ref="sketchContainer" class="w-full h-full min-h-[500px]"></div>
-  <!-- TODO: Write straigth on screen -->
-  <input v-if="stepCount - 1 === currentStep" v-model="labelString" placeholder="Name your soup" />
 </template>
 
 <script setup>
@@ -20,9 +18,8 @@ const CAN = {
   height: 519,
 }
 
-const labelString = ref("")
 const sketchContainer = ref(null)
-const props = defineProps(["currentStep", "stepCount"])
+const props = defineProps(["currentStep", "stepCount", "labelString"])
 const state = reactive({
   story: [],
 })
@@ -122,16 +119,16 @@ onMounted(() => {
         this.stencil = stencil
       }
       display() {
-        this.text = labelString.value
+        this.text = props.labelString
         const x = this.stencil.x + this.stencil.width/2
         const y = this.stencil.y + this.stencil.height*0.71
-        p5.stroke(0)
-        p5.strokeWeight(2)
-        p5.noFill()
-        p5.rectMode(p5.CENTER)
-        p5.rect(x, y, this.width, this.height)
-        p5.noStroke()
+        // p5.stroke(0)
+        // p5.strokeWeight(2)
+        // p5.noFill()
+        // p5.rectMode(p5.CENTER)
+        // p5.rect(x, y, this.width, this.height)
         
+        p5.noStroke()        
         p5.fill(this.fill)
         p5.textAlign(p5.CENTER, p5.CENTER)
         p5.textSize(this.height * 0.35)

@@ -138,6 +138,7 @@ onMounted(() => {
         this.fill = 255
         this.height = 10
         this.progress = 0
+        this.printedHeight = 0
       }
       reset() {
         this.isPrinted = false
@@ -166,13 +167,16 @@ onMounted(() => {
             this.stencil.isPrinted = true
           } else {
             this.progress = newPosY - this.stencil.y
+            if (this.progress > this.printedHeight) {
+              this.printedHeight = this.progress
+            }
           }
         }
       }
       display() {
         this.stencil.display()
         p5.fill(this.colorFill)
-        p5.rect(this.stencil.x, this.stencil.y, this.stencil.width, this.progress)
+        p5.rect(this.stencil.x, this.stencil.y, this.stencil.width, this.printedHeight)
         p5.fill(this.fill)
         p5.rect(this.stencil.x, this.stencil.y + this.progress, this.stencil.width, this.height)
       }

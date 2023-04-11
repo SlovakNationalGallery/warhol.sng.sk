@@ -18,6 +18,8 @@ let isDragging = ref(false); // Flag to indicate if the ellipse is being dragged
 // let canvas; // Reference to the p5.js canvas
 // const canvas = ref(null)
 const sketchContainer = ref(null)
+let pointer;
+
 
 const p5sketch = (sketch) => {
   sketch.setup = () => {
@@ -25,6 +27,7 @@ const p5sketch = (sketch) => {
     // sketch.background(100);
     const canvas = sketch.createCanvas(400, 400);
     canvas.parent('stencilCanvas'); // Append the canvas to the DOM
+    pointer = sketch.createVector();
   };
 
   sketch.draw = () => {
@@ -33,48 +36,36 @@ const p5sketch = (sketch) => {
     sketch.ellipse(x, y, 50, 50);
   };
 
-  sketch.mousePressed = () => {
-    // Check if the mouse is over the ellipse
-    console.log(sketch.mouseX);
-    if (sketch.dist(sketch.mouseX, sketch.mouseY, x, y) < 25) {
-      isDragging.value = true; // Start dragging the ellipse
-    }
-  };
-
-  sketch.mouseReleased = () => {
-    isDragging.value = false; // Stop dragging the ellipse
-  };
-
-    sketch.mouseDragged = () => {
-    if (isDragging.value) {
-      // Update the ellipse coordinates based on touch movement
-      x = sketch.mouseX;
-      y = sketch.mouseY;
-    }
-  };
-
-
-
     sketch.touchStarted = () => {
     // Check if the touch is over the ellipse
-    const touch = sketch.touches[0];
-    if (touch && sketch.dist(touch.x, touch.y, x, y) < 25) {
+    if (typeof sketch.touches !== 'undefined' && sketch.touches.length > 0) {
+        pointer.set(sketch.touches[0].x, sketch.touches[0].y);
+    } else {
+        pointer.set(sketch.mouseX, sketch.mouseY);
+    }
+
+    if (sketch.dist(pointer.x, pointer.y, x, y) < 25) {
       isDragging.value = true; // Start dragging the ellipse
     }
   };
 
   sketch.touchMoved = () => {
+    
     if (isDragging.value) {
-      // Update the ellipse coordinates based on touch movement
-      const touch = sketch.touches[0];
-      if (touch) {
-        x = touch.x;
-        y = touch.y;
-      }
+    
+            if (typeof sketch.touches !== 'undefined' && sketch.touches.length > 0) {
+            pointer.set(sketch.touches[0].x, sketch.touches[0].y);
+        } else {
+            pointer.set(sketch.mouseX, sketch.mouseY);
+        }
+
+      x = pointer.x;
+      y = pointer.y;
     }
   };
 
   sketch.touchEnded = () => {
+    pointer.set();
     isDragging.value = false; // Stop dragging the ellipse
   };
 };

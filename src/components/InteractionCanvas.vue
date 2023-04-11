@@ -228,6 +228,33 @@ onMounted(() => {
         image: p5.loadImage(require("@/assets/can/0_red.png")),
         stencilImage: p5.loadImage(require("@/assets/can/0_red_stencil.png")),
       })
+      const grayStencil = new Stencil({
+        x: 0,
+        y: 0,
+        width: SCREEN_PRINT_CANVAS.width,
+        height: SCREEN_PRINT_CANVAS.height,
+        fill: 100,
+        image: p5.loadImage(require("@/assets/can/1_gray.png")),
+        stencilImage: p5.loadImage(require("@/assets/can/1_gray_stencil.png")),
+      })
+      const whiteStencil = new Stencil({
+        x: 0,
+        y: 0,
+        width: SCREEN_PRINT_CANVAS.width,
+        height: SCREEN_PRINT_CANVAS.height,
+        fill: 100,
+        image: p5.loadImage(require("@/assets/can/2_white.png")),
+        stencilImage: p5.loadImage(require("@/assets/can/2_white_stencil.png")),
+      })
+      const goldStencil = new Stencil({
+        x: 0,
+        y: 0,
+        width: SCREEN_PRINT_CANVAS.width,
+        height: SCREEN_PRINT_CANVAS.height,
+        fill: 100,
+        image: p5.loadImage(require("@/assets/can/3_gold.png")),
+        stencilImage: p5.loadImage(require("@/assets/can/3_gold_stencil.png")),
+      })
       const blackStencil = new Stencil({
         x: 0,
         y: 0,
@@ -246,6 +273,30 @@ onMounted(() => {
         {
           story_step: STORY_STEP.PAINT,
           shape: new Squeegee({ colorFill: p5.color("#B93645"), stencil: redStencil }),
+        },
+        {
+          story_step: STORY_STEP.STENCIL,
+          shape: grayStencil,
+        },
+        {
+          story_step: STORY_STEP.PAINT,
+          shape: new Squeegee({ colorFill: p5.color("#AAAFAF"), stencil: grayStencil }),
+        },
+        {
+          story_step: STORY_STEP.STENCIL,
+          shape: whiteStencil,
+        },
+        {
+          story_step: STORY_STEP.PAINT,
+          shape: new Squeegee({ colorFill: p5.color("#F0EBDD"), stencil: whiteStencil }),
+        },
+        {
+          story_step: STORY_STEP.STENCIL,
+          shape: goldStencil,
+        },
+        {
+          story_step: STORY_STEP.PAINT,
+          shape: new Squeegee({ colorFill: p5.color("#BD974F"), stencil: goldStencil }),
         },
         {
           story_step: STORY_STEP.STENCIL,

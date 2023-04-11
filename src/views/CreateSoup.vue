@@ -60,6 +60,30 @@ const steps = [
     description: "This is the second step",
   },
   {
+    title: "Prilož a zarovnaj šablónu",
+    description: "This is the first step",
+  },
+  {
+    title: "Nanes stierkou farbu",
+    description: "This is the second step",
+  },
+  {
+    title: "Prilož a zarovnaj šablónu",
+    description: "This is the first step",
+  },
+  {
+    title: "Nanes stierkou farbu",
+    description: "This is the second step",
+  },
+  {
+    title: "Prilož a zarovnaj šablónu",
+    description: "This is the first step",
+  },
+  {
+    title: "Nanes stierkou farbu",
+    description: "This is the second step",
+  },
+  {
     title: "Zrovnaj ďaľšiu šaplónu",
     description: "This is the third step",
   },

@@ -15,9 +15,9 @@
       </svg>
       <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">{{ steps[currentStep].title }}</h1>
       <div class="text-xl pb-20">
-        <input v-if="stepCount - 1 === currentStep"  v-model="labelString" class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4" type="text" placeholder="Enter text">
+        <input v-if="stepCount - 2 === currentStep"  v-model="labelString" class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4" type="text" placeholder="Enter text">
 
-        <p class="mb-4">
+        <p class="mb-4 whitespace-pre-wrap">
           {{ steps[currentStep].description }}
         </p>
       </div>
@@ -50,8 +50,6 @@ import InteractionCanvas from "../components/InteractionCanvas.vue"
 const labelString = ref('');
 const currentStep = ref(0)
 const router = useRouter()
-const stepCount = 5
-
 const steps = [
   {
     title: "Prilož a zarovnaj šablónu",
@@ -73,11 +71,19 @@ const steps = [
     title: "Ako sa bude volať?",
     description: "Andy Warhol dopisoval názvy polievok ručne. Každá sa volala inak. Pravdepodobne ich všetky dobre poznal. Konzumloval ich totiž každý deň.",
   },
-  // {
-  //   title: "Hotovo?",
-  //   description: "This is the third step",
-  // },
+  {
+    title: "Hotovo?",
+    description: `Grafika je vytlačená. Čas na poslednú kontrolu kvality. Vyzerá to skutočne tak, ako sme chceli? 
+
+    Ak áno, nastal čas ju podpísať. A zarámovať. Môže sa pridať do našej zbierky. 
+    
+    Ak treba niečo zmeniť/posunúť či napraviť - v realite by bolo treba začať odznova. Avšak u nás sa dá v každom kroku vrátiť späť.
+    `,
+  },
 ]
+
+const stepCount = steps.length
+
 
 const nextStep = () => {
   currentStep.value += 1

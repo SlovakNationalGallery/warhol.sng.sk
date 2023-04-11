@@ -11,6 +11,7 @@ const STORY_STEP = {
   PAINT: "paint",
   STENCIL: "stencil",
   LABEL: "label",
+  CONFIRM: "confirm",
 }
 
 const CAN = {
@@ -120,22 +121,18 @@ onMounted(() => {
       }
       display() {
         this.text = props.labelString
-        const x = this.stencil.x + this.stencil.width/2
-        const y = this.stencil.y + this.stencil.height*0.71
-        // p5.stroke(0)
-        // p5.strokeWeight(2)
-        // p5.noFill()
-        // p5.rectMode(p5.CENTER)
-        // p5.rect(x, y, this.width, this.height)
-        
-        p5.noStroke()        
+        const x = this.stencil.x + this.stencil.width / 2
+        const y = this.stencil.y + this.stencil.height * 0.71
+
+        p5.rectMode(p5.CENTER)
+        p5.noStroke()
         p5.fill(this.fill)
         p5.textAlign(p5.CENTER, p5.CENTER)
         p5.textSize(this.height * 0.35)
-        p5.textStyle(p5.BOLD);
+        p5.textStyle(p5.BOLD)
         p5.text(this.text.toUpperCase(), x, y, this.width, this.height)
         p5.strokeWeight(1)
-        p5.rectMode(p5.CORNERS)
+        p5.rectMode(p5.CORNER)
       }
     }
 
@@ -198,14 +195,26 @@ onMounted(() => {
         p5.rect(this.stencil.x, this.stencil.y + this.progress, this.stencil.width, bladeSize)
         p5.fill(0)
         const handleSize = bladeSize * 1.2
-        p5.rect(this.stencil.x + (this.stencil.width/2) - handleSize/2, this.stencil.y + this.progress, handleSize, handleSize, handleSize / 7)
+        p5.rect(
+          this.stencil.x + this.stencil.width / 2 - handleSize / 2,
+          this.stencil.y + this.progress,
+          handleSize,
+          handleSize,
+          handleSize / 7
+        )
         const circleSize = handleSize * 0.65
         p5.fill(this.colorFill)
-        p5.rect(this.stencil.x + (this.stencil.width/2) - circleSize/2, this.stencil.y + this.progress + (handleSize-circleSize)/2, circleSize, circleSize, circleSize)
+        p5.rect(
+          this.stencil.x + this.stencil.width / 2 - circleSize / 2,
+          this.stencil.y + this.progress + (handleSize - circleSize) / 2,
+          circleSize,
+          circleSize,
+          circleSize
+        )
         p5.fill(0)
         p5.textSize(28)
         p5.textAlign(p5.CENTER, p5.TOP)
-        p5.text('↓', this.stencil.x + this.stencil.width/2, this.stencil.y + this.progress + (handleSize-circleSize)/1.2)
+        p5.text("↓", this.stencil.x + this.stencil.width / 2, this.stencil.y + this.progress + (handleSize - circleSize) / 1.2)
       }
     }
 
@@ -236,7 +245,7 @@ onMounted(() => {
         },
         {
           story_step: STORY_STEP.PAINT,
-          shape: new Squeegee({ colorFill: p5.color('#B93645'), stencil: redStencil }),
+          shape: new Squeegee({ colorFill: p5.color("#B93645"), stencil: redStencil }),
         },
         {
           story_step: STORY_STEP.STENCIL,
@@ -244,11 +253,23 @@ onMounted(() => {
         },
         {
           story_step: STORY_STEP.PAINT,
-          shape: new Squeegee({ colorFill: p5.color('#040404'), stencil: blackStencil }),
+          shape: new Squeegee({ colorFill: p5.color("#040404"), stencil: blackStencil }),
         },
         {
           story_step: STORY_STEP.LABEL,
-          shape: new Label({ x: 0, y: 0, width: SCREEN_PRINT_CANVAS.width * 0.7, height: SCREEN_PRINT_CANVAS.height * 0.2, fill: p5.color('#B93645'), text: "Bean Soup", stencil: blackStencil }),
+          shape: new Label({
+            x: 0,
+            y: 0,
+            width: SCREEN_PRINT_CANVAS.width * 0.7,
+            height: SCREEN_PRINT_CANVAS.height * 0.2,
+            fill: p5.color("#B93645"),
+            text: "",
+            stencil: blackStencil,
+          }),
+        },
+        {
+          story_step: STORY_STEP.CONFIRM,
+          shape: new DraggableItem({ x: 0, y: 0, width: 0, height: 0, fill: 0 }),
         },
       ]
     }
@@ -274,24 +295,45 @@ onMounted(() => {
       p5.clear()
       p5.background(255)
       p5.showPrintMarkers()
+
+      p5.drawingContext.save()
+
+      if (state.story[props.currentStep].story_step === STORY_STEP.CONFIRM) {
+        p5.background("#F2F0EA")
+
+        p5.rectMode(p5.CENTER)
+        p5.fill("#F6F3ED")
+        p5.rect(p5.width / 2, p5.height / 2, SCREEN_PRINT_CANVAS.width + 20, SCREEN_PRINT_CANVAS.height + 20)
+        p5.fill(255)
+        p5.rect(p5.width / 2, p5.height / 2, SCREEN_PRINT_CANVAS.width, SCREEN_PRINT_CANVAS.height)
+
+        p5.rect(p5.width / 2, p5.height / 2, SCREEN_PRINT_CANVAS.width, SCREEN_PRINT_CANVAS.height)
+        p5.rectMode(p5.CORNER)
+        p5.drawingContext.clip()
+      }
+
       state.story.map((item, index) => {
-        if (item.story_step === STORY_STEP.STENCIL && index < props.currentStep - 1) {
+        if ((item.story_step === STORY_STEP.STENCIL || item.story_step === STORY_STEP.LABEL) && index < props.currentStep - 1) {
           item.shape.display()
         } else if (item.story_step === STORY_STEP.PAINT && index == props.currentStep - 1) {
           item.shape.stencil.setPrinted()
         }
       })
-      if (prevStep != props.currentStep) {
-        state.story[props.currentStep].shape.reset()
-        prevStep = props.currentStep
+      if (state.story[props.currentStep].story_step !== STORY_STEP.CONFIRM) {
+        if (prevStep != props.currentStep) {
+          state.story[props.currentStep].shape.reset()
+          prevStep = props.currentStep
+        }
+        state.story[props.currentStep].shape.display()
       }
-      state.story[props.currentStep].shape.display()
+      p5.drawingContext.restore()
     }
 
     p5.showPrintMarkers = () => {
       p5.fill(255)
       p5.stroke(0)
       const offset = 30
+      p5.rectMode(p5.CORNER)
       p5.rect(
         (p5.width - SCREEN_PRINT_CANVAS.width) / 2,
         (p5.height - SCREEN_PRINT_CANVAS.height) / 2,

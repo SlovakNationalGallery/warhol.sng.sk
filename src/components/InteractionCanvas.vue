@@ -130,6 +130,7 @@ onMounted(() => {
         p5.fill(0)
         p5.textAlign(p5.CENTER, p5.CENTER)
         p5.text(this.text, this.x, this.y, this.width, this.height)
+        p5.strokeWeight(1)
       }
     }
 
@@ -138,6 +139,7 @@ onMounted(() => {
         this.colorFill = colorFill
         this.stencil = stencil
         this.fill = 255
+        this.colorFill = colorFill
         this.height = 10
         this.progress = 0
         this.printedHeight = 0
@@ -178,9 +180,13 @@ onMounted(() => {
       }
       display() {
         this.stencil.display()
+        this.colorFill.setAlpha(220)
+        p5.noStroke()
         p5.fill(this.colorFill)
         p5.rect(this.stencil.x, this.stencil.y, this.stencil.width, this.printedHeight)
-        p5.fill(this.fill)
+        p5.stroke(0)
+        this.colorFill.setAlpha(255)
+        p5.fill(this.colorFill)
         p5.rect(this.stencil.x, this.stencil.y + this.progress, this.stencil.width, this.height)
       }
     }
@@ -212,7 +218,7 @@ onMounted(() => {
         },
         {
           story_step: STORY_STEP.PAINT,
-          shape: new Squeegee({ colorFill: 120, stencil: redStencil }),
+          shape: new Squeegee({ colorFill: p5.color('#B93645'), stencil: redStencil }),
         },
         {
           story_step: STORY_STEP.STENCIL,
@@ -220,7 +226,7 @@ onMounted(() => {
         },
         {
           story_step: STORY_STEP.PAINT,
-          shape: new Squeegee({ colorFill: 120, stencil: blackStencil }),
+          shape: new Squeegee({ colorFill: p5.color('#040404'), stencil: blackStencil }),
         },
         {
           story_step: STORY_STEP.LABEL,

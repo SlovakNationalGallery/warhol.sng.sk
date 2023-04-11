@@ -30,6 +30,8 @@ const state = reactive({
   story: [],
 })
 
+let prevStep = 0
+
 onMounted(() => {
   // NOTE: Use p5 as an instance mode
 
@@ -111,6 +113,11 @@ onMounted(() => {
           p5.image(this.stencilSvg, this.x, this.y, this.width, this.height)
         }
       }
+      setPrinted() {
+        if (!this.isPrinted) {
+          this.isPrinted = true
+        }
+      }
     }
 
     class Label extends DraggableItem {
@@ -141,7 +148,9 @@ onMounted(() => {
         this.printedHeight = 0
       }
       reset() {
-        this.isPrinted = false
+        this.progress = 0
+        this.printedHeight = 0
+        this.stencil.reset()
       }
       touchStarted() {
         if (
@@ -164,7 +173,6 @@ onMounted(() => {
             this.progress = 0
           } else if (newPosY + this.height > this.stencil.y + this.stencil.height) {
             this.progress = this.stencil.height - this.height
-            this.stencil.isPrinted = true
           } else {
             this.progress = newPosY - this.stencil.y
             if (this.progress > this.printedHeight) {
@@ -251,9 +259,15 @@ onMounted(() => {
       state.story.map((item, index) => {
         if (item.story_step === STORY_STEP.STENCIL && index < props.currentStep - 1) {
           item.shape.display()
+        } 
+        else if (item.story_step === STORY_STEP.PAINT && index == props.currentStep - 1) {
+          item.shape.stencil.setPrinted()
         }
       })
-      state.story[props.currentStep].shape.reset()
+      if (prevStep != props.currentStep) {
+        state.story[props.currentStep].shape.reset()
+        prevStep = props.currentStep
+      }
       state.story[props.currentStep].shape.display()
     }
   }

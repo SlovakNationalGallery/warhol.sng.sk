@@ -38,11 +38,7 @@ const p5sketch = (sketch) => {
 
     sketch.touchStarted = () => {
     // Check if the touch is over the ellipse
-    if (typeof sketch.touches !== 'undefined' && sketch.touches.length > 0) {
-        pointer.set(sketch.touches[0].x, sketch.touches[0].y);
-    } else {
-        pointer.set(sketch.mouseX, sketch.mouseY);
-    }
+    sketch.setPointerPosition()
 
     if (sketch.dist(pointer.x, pointer.y, x, y) < 25) {
       isDragging.value = true; // Start dragging the ellipse
@@ -51,14 +47,11 @@ const p5sketch = (sketch) => {
 
   sketch.touchMoved = () => {
     
+    sketch.setPointerPosition()
+
     if (isDragging.value) {
     
-            if (typeof sketch.touches !== 'undefined' && sketch.touches.length > 0) {
-            pointer.set(sketch.touches[0].x, sketch.touches[0].y);
-        } else {
-            pointer.set(sketch.mouseX, sketch.mouseY);
-        }
-
+    
       x = pointer.x;
       y = pointer.y;
     }
@@ -67,6 +60,15 @@ const p5sketch = (sketch) => {
   sketch.touchEnded = () => {
     pointer.set();
     isDragging.value = false; // Stop dragging the ellipse
+  };
+
+  sketch.setPointerPosition = () => {
+   if (typeof sketch.touches !== 'undefined' && sketch.touches.length > 0) {
+        pointer.set(sketch.touches[0].x, sketch.touches[0].y);
+    } else {
+        pointer.set(sketch.mouseX, sketch.mouseY);
+    }
+    console.log('pointer: ' + pointer.x)
   };
 };
 
@@ -83,7 +85,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-#stencilCanvas {
-  touch-action: none; /* Prevent scrolling or scaling on touch devices */
-}
+/* #stencilCanvas {
+  touch-action: none; 
+} */
 </style>

@@ -189,8 +189,8 @@ onMounted(() => {
       const redStencil = new Stencil({
         x: 0,
         y: 0,
-        width: 100,
-        height: 200,
+        width: SCREEN_PRINT_CANVAS.width,
+        height: SCREEN_PRINT_CANVAS.height,
         fill: 100,
         image: p5.loadImage(require("@/assets/can/0_red.png")),
         stencilImage: p5.loadImage(require("@/assets/can/0_red_stencil.png")),
@@ -198,8 +198,8 @@ onMounted(() => {
       const blackStencil = new Stencil({
         x: 0,
         y: 0,
-        width: 100,
-        height: 200,
+        width: SCREEN_PRINT_CANVAS.width,
+        height: SCREEN_PRINT_CANVAS.height,
         fill: 100,
         image: p5.loadImage(require("@/assets/can/4_black.png")),
         stencilImage: p5.loadImage(require("@/assets/can/4_black_stencil.png")),

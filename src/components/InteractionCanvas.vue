@@ -131,7 +131,7 @@ onMounted(() => {
       }
     }
 
-    class Squeege {
+    class Squeegee {
       constructor({ colorFill, stencil }) {
         this.colorFill = colorFill
         this.stencil = stencil
@@ -205,7 +205,7 @@ onMounted(() => {
         },
         {
           story_step: STORY_STEP.PAINT,
-          shape: new Squeege({ colorFill: 120, stencil: redStencil }),
+          shape: new Squeegee({ colorFill: 120, stencil: redStencil }),
         },
         {
           story_step: STORY_STEP.STENCIL,
@@ -213,7 +213,7 @@ onMounted(() => {
         },
         {
           story_step: STORY_STEP.PAINT,
-          shape: new Squeege({ colorFill: 120, stencil: blackStencil }),
+          shape: new Squeegee({ colorFill: 120, stencil: blackStencil }),
         },
         {
           story_step: STORY_STEP.LABEL,

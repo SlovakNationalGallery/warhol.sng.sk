@@ -116,21 +116,29 @@ onMounted(() => {
     }
 
     class Label extends DraggableItem {
-      constructor({ x, y, width, height, fill, text }) {
+      constructor({ x, y, width, height, fill, text, stencil }) {
         super({ x, y, width, height, fill })
         this.text = text
+        this.stencil = stencil
       }
       display() {
         this.text = labelString.value
-        p5.stroke("red")
-        p5.strokeWeight(4)
-        p5.fill(this.fill)
-        p5.rect(this.x, this.y, this.width, this.height)
+        const x = this.stencil.x + this.stencil.width/2
+        const y = this.stencil.y + this.stencil.height*0.71
+        p5.stroke(0)
+        p5.strokeWeight(2)
+        p5.noFill()
+        p5.rectMode(p5.CENTER)
+        p5.rect(x, y, this.width, this.height)
         p5.noStroke()
-        p5.fill(0)
+        
+        p5.fill(this.fill)
         p5.textAlign(p5.CENTER, p5.CENTER)
-        p5.text(this.text, this.x, this.y, this.width, this.height)
+        p5.textSize(this.height * 0.35)
+        p5.textStyle(p5.BOLD);
+        p5.text(this.text.toUpperCase(), x, y, this.width, this.height)
         p5.strokeWeight(1)
+        p5.rectMode(p5.CORNERS)
       }
     }
 
@@ -243,7 +251,7 @@ onMounted(() => {
         },
         {
           story_step: STORY_STEP.LABEL,
-          shape: new Label({ x: 100, y: 100, width: 100, height: 100, fill: 200, text: "Bean Soup" }),
+          shape: new Label({ x: 0, y: 0, width: SCREEN_PRINT_CANVAS.width * 0.7, height: SCREEN_PRINT_CANVAS.height * 0.2, fill: p5.color('#B93645'), text: "Bean Soup", stencil: blackStencil }),
         },
       ]
     }

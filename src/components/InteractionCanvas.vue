@@ -8,10 +8,9 @@
 /*eslint-disable*/
 import { onMounted, ref, reactive, defineProps } from "vue"
 import redSVG from "../assets/can/0_red.svg"
-import graySVG from "../assets/can/1_gray.svg"
-import whiteSVG from "../assets/can/2_white.svg"
-import goldSVG from "../assets/can/3_gold.svg"
+import redStencilSVG from "../assets/can/0_red_stencil.svg"
 import blackSVG from "../assets/can/4_black.svg"
+import blackStencilSVG from "../assets/can/4_black_stencil.svg"
 
 import p5svg from "p5.js-svg"
 import p5 from "p5"
@@ -31,9 +30,10 @@ const state = reactive({
   story: [],
 })
 
+let prevStep = 0
+
 onMounted(() => {
   // NOTE: Use p5 as an instance mode
-  var redStencil, grayStencil, whiteStencil, goldStencil, blackStencil
 
   const script = function (p5) {
     const P5_CANVAS = {
@@ -60,6 +60,9 @@ onMounted(() => {
       display() {
         p5.fill(this.fill)
         p5.rect(this.x, this.y, this.width, this.height)
+      }
+      reset() {
+        // if necessary, reinit properties
       }
       touchMoved() {
         if (this.isDragging) {
@@ -94,12 +97,26 @@ onMounted(() => {
     }
 
     class Stencil extends DraggableItem {
-      constructor({ x, y, width, height, fill, svg }) {
+      constructor({ x, y, width, height, fill, svg, stencilSvg }) {
         super({ x, y, width, height, fill })
         this.svg = svg
+        this.stencilSvg = stencilSvg
+        this.isPrinted = false
+      }
+      reset() {
+        this.isPrinted = false
       }
       display() {
-        p5.image(this.svg, this.x, this.y, this.width, this.height)
+        if (this.isPrinted) {
+          p5.image(this.svg, this.x, this.y, this.width, this.height)
+        } else {
+          p5.image(this.stencilSvg, this.x, this.y, this.width, this.height)
+        }
+      }
+      setPrinted() {
+        if (!this.isPrinted) {
+          this.isPrinted = true
+        }
       }
     }
 
@@ -121,55 +138,94 @@ onMounted(() => {
       }
     }
 
-    class Squeege extends DraggableItem {
-      constructor({ colorFill }) {
-        super({ x: 0, y: 0, width: P5_CANVAS.width, height: 20, fill: 255 })
+    class Squeegee {
+      constructor({ colorFill, stencil }) {
         this.colorFill = colorFill
+        this.stencil = stencil
+        this.fill = 255
+        this.height = 10
+        this.progress = 0
+        this.printedHeight = 0
+      }
+      reset() {
+        this.progress = 0
+        this.printedHeight = 0
+        this.stencil.reset()
+      }
+      touchStarted() {
+        if (
+          p5.mouseX > this.stencil.x &&
+          p5.mouseX < this.stencil.x + this.stencil.width &&
+          p5.mouseY > this.stencil.y &&
+          p5.mouseY < this.stencil.y + this.stencil.height
+        ) {
+          this.offSetY = p5.mouseY - (this.stencil.y + this.progress)
+          this.isDragging = true
+        }
+      }
+      touchEnded() {
+        this.isDragging = false
       }
       touchMoved() {
         if (this.isDragging) {
           const newPosY = p5.mouseY - this.offSetY
-
-          if (newPosY < 0) {
-            this.y = 0
-          } else if (newPosY + this.height > P5_CANVAS.height) {
-            this.y = P5_CANVAS.height - this.height
+          if (newPosY < this.stencil.y) {
+            this.progress = 0
+          } else if (newPosY + this.height > this.stencil.y + this.stencil.height) {
+            this.progress = this.stencil.height - this.height
           } else {
-            this.y = newPosY
+            this.progress = newPosY - this.stencil.y
+            if (this.progress > this.printedHeight) {
+              this.printedHeight = this.progress
+            }
           }
         }
       }
       display() {
-        p5.fill(this.fill)
-        p5.rect(this.x, this.y, this.width, this.height)
+        this.stencil.display()
         p5.fill(this.colorFill)
-        p5.rect(0, 0, this.width, this.y)
+        p5.rect(this.stencil.x, this.stencil.y, this.stencil.width, this.printedHeight)
+        p5.fill(this.fill)
+        p5.rect(this.stencil.x, this.stencil.y + this.progress, this.stencil.width, this.height)
       }
     }
-  
+
     p5.preload = () => {
-      redStencil = p5.loadSVG(redSVG)
-      grayStencil = p5.loadSVG(graySVG)
-      whiteStencil = p5.loadSVG(whiteSVG)
-      goldStencil = p5.loadSVG(goldSVG)
-      blackStencil = p5.loadSVG(blackSVG)
+      const redStencil = new Stencil({
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 200,
+        fill: 100,
+        svg: p5.loadSVG(redSVG),
+        stencilSvg: p5.loadSVG(redStencilSVG),
+      })
+      const blackStencil = new Stencil({
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 200,
+        fill: 100,
+        svg: p5.loadSVG(blackSVG),
+        stencilSvg: p5.loadSVG(blackStencilSVG),
+      })
 
       state.story = [
         {
           story_step: STORY_STEP.STENCIL,
-          shape: new Stencil({ x: 0, y: 0, width: 100, height: 200, fill: 100, svg: redStencil }),
+          shape: redStencil,
         },
         {
           story_step: STORY_STEP.PAINT,
-          shape: new Squeege({ colorFill: 120 }),
+          shape: new Squeegee({ colorFill: 120, stencil: redStencil }),
         },
         {
           story_step: STORY_STEP.STENCIL,
-          shape: new Stencil({ x: 0, y: 0, width: 100, height: 200, fill: 100, svg: blackStencil }),
+          shape: blackStencil,
         },
         {
           story_step: STORY_STEP.PAINT,
-          shape: new Squeege({ colorFill: 120 }),
+          shape: new Squeegee({ colorFill: 120, stencil: blackStencil }),
         },
         {
           story_step: STORY_STEP.LABEL,
@@ -201,10 +257,17 @@ onMounted(() => {
       p5.fill(255)
       p5.rect(SCREEN_PRINT_CANVAS.posX, SCREEN_PRINT_CANVAS.posY, SCREEN_PRINT_CANVAS.width, SCREEN_PRINT_CANVAS.height)
       state.story.map((item, index) => {
-        if (item.story_step === STORY_STEP.STENCIL && index < props.currentStep) {
+        if (item.story_step === STORY_STEP.STENCIL && index < props.currentStep - 1) {
           item.shape.display()
+        } 
+        else if (item.story_step === STORY_STEP.PAINT && index == props.currentStep - 1) {
+          item.shape.stencil.setPrinted()
         }
       })
+      if (prevStep != props.currentStep) {
+        state.story[props.currentStep].shape.reset()
+        prevStep = props.currentStep
+      }
       state.story[props.currentStep].shape.display()
     }
   }

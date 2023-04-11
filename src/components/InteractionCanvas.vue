@@ -8,9 +8,9 @@
 /*eslint-disable*/
 import { onMounted, ref, reactive, defineProps } from "vue"
 import redSVG from "../assets/can/0_red.svg"
-import redPrintedSVG from "../assets/can/0_red_stencil.svg"
+import redStencilSVG from "../assets/can/0_red_stencil.svg"
 import blackSVG from "../assets/can/4_black.svg"
-import blackInvertedSVG from "../assets/can/4_black_stencil.svg"
+import blackStencilSVG from "../assets/can/4_black_stencil.svg"
 
 import p5svg from "p5.js-svg"
 import p5 from "p5"
@@ -59,6 +59,9 @@ onMounted(() => {
         p5.fill(this.fill)
         p5.rect(this.x, this.y, this.width, this.height)
       }
+      reset() {
+        // if necessary, reinit properties
+      }
       touchMoved() {
         if (this.isDragging) {
           const newPosX = p5.mouseX - this.offSetX
@@ -92,16 +95,21 @@ onMounted(() => {
     }
 
     class Stencil extends DraggableItem {
-      constructor({ x, y, width, height, fill, svg, invertedSvg }) {
+      constructor({ x, y, width, height, fill, svg, stencilSvg }) {
         super({ x, y, width, height, fill })
         this.svg = svg
-        this.invertedSvg = invertedSvg
+        this.stencilSvg = stencilSvg
+        this.isPrinted = false
+      }
+      reset() {
+        this.isPrinted = false
       }
       display() {
-        p5.image(this.svg, this.x, this.y, this.width, this.height)
-      }
-      displayInverted() {
-        p5.image(this.invertedSvg, this.x, this.y, this.width, this.height)
+        if (this.isPrinted) {
+          p5.image(this.svg, this.x, this.y, this.width, this.height)
+        } else {
+          p5.image(this.stencilSvg, this.x, this.y, this.width, this.height)
+        }
       }
     }
 
@@ -131,6 +139,9 @@ onMounted(() => {
         this.height = 10
         this.progress = 0
       }
+      reset() {
+        this.isPrinted = false
+      }
       touchStarted() {
         if (
           p5.mouseX > this.stencil.x &&
@@ -152,13 +163,14 @@ onMounted(() => {
             this.progress = 0
           } else if (newPosY + this.height > this.stencil.y + this.stencil.height) {
             this.progress = this.stencil.height - this.height
+            this.stencil.isPrinted = true
           } else {
             this.progress = newPosY - this.stencil.y
           }
         }
       }
       display() {
-        this.stencil.displayInverted()
+        this.stencil.display()
         p5.fill(this.colorFill)
         p5.rect(this.stencil.x, this.stencil.y, this.stencil.width, this.progress)
         p5.fill(this.fill)
@@ -174,7 +186,7 @@ onMounted(() => {
         height: 200,
         fill: 100,
         svg: p5.loadSVG(redSVG),
-        invertedSvg: p5.loadSVG(redPrintedSVG),
+        stencilSvg: p5.loadSVG(redStencilSVG),
       })
       const blackStencil = new Stencil({
         x: 0,
@@ -183,7 +195,7 @@ onMounted(() => {
         height: 200,
         fill: 100,
         svg: p5.loadSVG(blackSVG),
-        invertedSvg: p5.loadSVG(blackInvertedSVG),
+        stencilSvg: p5.loadSVG(blackStencilSVG),
       })
 
       state.story = [
@@ -237,6 +249,7 @@ onMounted(() => {
           item.shape.display()
         }
       })
+      state.story[props.currentStep].shape.reset()
       state.story[props.currentStep].shape.display()
     }
   }

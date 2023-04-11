@@ -1,5 +1,5 @@
 <template>
-  <div id="stencil-canvas" ref="sketchContainer" class="w-96 h-96"></div>
+  <div id="stencilCanvas" ref="sketchContainer" class="w-96 h-96"></div>
   <!-- TODO: Write straigth on screen -->
   <input v-if="stepCount - 1 === currentStep" v-model="labelString" placeholder="Name your soup" />
 </template>
@@ -7,15 +7,7 @@
 <script setup>
 /*eslint-disable*/
 import { onMounted, ref, reactive, defineProps } from "vue"
-import redSVG from "../assets/can/0_red.svg"
-import redStencilSVG from "../assets/can/0_red_stencil.svg"
-import blackSVG from "../assets/can/4_black.svg"
-import blackStencilSVG from "../assets/can/4_black_stencil.svg"
-
-import p5svg from "p5.js-svg"
 import p5 from "p5"
-
-p5svg(p5)
 
 const STORY_STEP = {
   PAINT: "paint",
@@ -37,8 +29,8 @@ onMounted(() => {
 
   const script = function (p5) {
     const P5_CANVAS = {
-      width: document.getElementById("stencil-canvas").offsetWidth,
-      height: document.getElementById("stencil-canvas").offsetHeight,
+      width: document.getElementById("stencilCanvas").offsetWidth,
+      height: document.getElementById("stencilCanvas").offsetHeight,
     }
 
     const SCREEN_PRINT_CANVAS = {
@@ -97,10 +89,10 @@ onMounted(() => {
     }
 
     class Stencil extends DraggableItem {
-      constructor({ x, y, width, height, fill, svg, stencilSvg }) {
+      constructor({ x, y, width, height, fill, image, stencilImage }) {
         super({ x, y, width, height, fill })
-        this.svg = svg
-        this.stencilSvg = stencilSvg
+        this.image = image
+        this.stencilImage = stencilImage
         this.isPrinted = false
       }
       reset() {
@@ -108,9 +100,9 @@ onMounted(() => {
       }
       display() {
         if (this.isPrinted) {
-          p5.image(this.svg, this.x, this.y, this.width, this.height)
+          p5.image(this.image, this.x, this.y, this.width, this.height)
         } else {
-          p5.image(this.stencilSvg, this.x, this.y, this.width, this.height)
+          p5.image(this.stencilImage, this.x, this.y, this.width, this.height)
         }
       }
       setPrinted() {
@@ -197,8 +189,8 @@ onMounted(() => {
         width: 100,
         height: 200,
         fill: 100,
-        svg: p5.loadSVG(redSVG),
-        stencilSvg: p5.loadSVG(redStencilSVG),
+        image: p5.loadImage(require('@/assets/can/0_red.png')),
+        stencilImage: p5.loadImage(require('@/assets/can/0_red_stencil.png')),
       })
       const blackStencil = new Stencil({
         x: 0,
@@ -206,8 +198,8 @@ onMounted(() => {
         width: 100,
         height: 200,
         fill: 100,
-        svg: p5.loadSVG(blackSVG),
-        stencilSvg: p5.loadSVG(blackStencilSVG),
+        image: p5.loadImage(require('@/assets/can/4_black.png')),
+        stencilImage: p5.loadImage(require('@/assets/can/4_black_stencil.png')),
       })
 
       state.story = [
@@ -247,8 +239,8 @@ onMounted(() => {
     }
     // NOTE: Set up is here
     p5.setup = () => {
-      const canvas = p5.createCanvas(P5_CANVAS.width, P5_CANVAS.height, p5.SVG)
-      canvas.parent("stencil-canvas")
+      const canvas = p5.createCanvas(P5_CANVAS.width, P5_CANVAS.height)
+      canvas.parent("stencilCanvas")
     }
 
     p5.draw = () => {
@@ -274,3 +266,9 @@ onMounted(() => {
   new p5(script, sketchContainer.value)
 })
 </script>
+
+<style scoped>
+#stencilCanvas {
+  touch-action: none;
+}
+</style>

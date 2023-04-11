@@ -9,8 +9,8 @@
       </div>
       <svg class="w-100 h-auto fill-none stroke-black stroke-[4px] mb-8 lg:mb-16" viewBox="0 0 660 24">
         <g v-for="(index, value) in stepCount" :key="index">
-          <circle :cx="12 + 159 * value" cy="12" r="10" :class="{ 'fill-black': currentStep >= value }" />
-          <path :d="'M' + (24 + 159 * value) + ' 12H' + (159 + 159 * value)" />
+          <circle :cx="12 + (690/stepCount) * value" cy="12" r="10" :class="{ 'fill-black': currentStep >= value }" />
+          <path v-if="index < stepCount" :d="'M' + (24 + (690/stepCount) * value) + ' 12H' + ((690/stepCount) + (690/stepCount) * value)" />
         </g>
       </svg>
       <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">{{ steps[currentStep].title }}</h1>

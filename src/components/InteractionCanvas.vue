@@ -204,7 +204,7 @@ onMounted(() => {
         )
         const circleSize = handleSize * 0.65
         p5.fill(this.colorFill)
-        
+
         if (p5.lightness(this.colorFill) < 20) {
           p5.stroke(220)
           p5.strokeWeight(2)
@@ -219,7 +219,7 @@ onMounted(() => {
         )
         p5.fill(0)
         if (p5.lightness(this.colorFill) < 20) {
-          p5.fill(220) 
+          p5.fill(220)
         }
         p5.textSize(28)
         p5.textAlign(p5.CENTER, p5.TOP)
@@ -373,7 +373,9 @@ onMounted(() => {
       }
 
       state.story.map((item, index) => {
-        if ((item.story_step === STORY_STEP.STENCIL || item.story_step === STORY_STEP.LABEL) && index < props.currentStep - 1) {
+        if (item.story_step === STORY_STEP.LABEL && index < props.currentStep) {
+          item.shape.display()
+        } else if (item.story_step === STORY_STEP.STENCIL && index < props.currentStep - 1) {
           item.shape.display()
         } else if (item.story_step === STORY_STEP.PAINT && index == props.currentStep - 1) {
           item.shape.stencil.setPrinted()

@@ -4,7 +4,7 @@
       <InteractionCanvas :current-step="currentStep" :step-count="stepCount" :label-string="labelString" />
     </div>
     <div class="p-6 lg:p-16 lg:w-2/5 lg:min-h-screen bg-wall relative">
-      <div class="mb-5 text-xl">
+      <div class="mb-5 text-xl xl:text-2xl">
         krok <b>{{ currentStep + 1 }} / {{ stepCount }}</b>
       </div>
       <svg class="w-100 h-auto fill-none stroke-black stroke-[4px] mb-8 lg:mb-16" viewBox="0 0 660 24">
@@ -14,7 +14,7 @@
         </g>
       </svg>
       <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">{{ steps[currentStep].title }}</h1>
-      <div class="text-xl pb-20">
+      <div class="text-xl xl:text-2xl pb-20">
         <input v-if="stepCount - 2 === currentStep"  v-model="labelString" class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4 lg:mb-8" type="text" placeholder="Enter text">
 
         <p class="mb-4 whitespace-pre-wrap">

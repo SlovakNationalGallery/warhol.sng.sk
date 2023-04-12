@@ -101,8 +101,10 @@ onMounted(() => {
       }
       display() {
         if (this.isPrinted) {
+          p5.tint(255, 255)
           p5.image(this.image, this.x, this.y, this.width, this.height)
         } else {
+          p5.tint(255, 220)
           p5.image(this.stencilImage, this.x, this.y, this.width, this.height)
         }
       }

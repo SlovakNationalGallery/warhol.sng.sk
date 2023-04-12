@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full bg-wall lg:flex select-none">
+  <div class="w-full h-full bg-wall lg:flex select-none overscroll-none">
     <div class="lg:h-full bg-white lg:w-3/5">
       <InteractionCanvas :current-step="currentStep" :step-count="stepCount" :label-string="labelString" />
     </div>

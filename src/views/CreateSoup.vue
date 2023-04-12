@@ -1,16 +1,16 @@
 <template>
-  <div class="w-full h-full bg-wall lg:flex">
+  <div class="w-full h-full bg-wall lg:flex select-none">
     <div class="lg:h-full bg-white lg:w-3/5">
       <InteractionCanvas :current-step="currentStep" :step-count="stepCount" :label-string="labelString" />
     </div>
-    <div class="p-8 lg:p-16 lg:w-2/5 min-h-screen bg-wall relative">
+    <div class="p-6 lg:p-16 lg:w-2/5 lg:min-h-screen bg-wall relative">
       <div class="mb-5 text-xl">
         krok <b>{{ currentStep + 1 }} / {{ stepCount }}</b>
       </div>
       <svg class="w-100 h-auto fill-none stroke-black stroke-[4px] mb-8 lg:mb-16" viewBox="0 0 660 24">
         <g v-for="(index, value) in stepCount" :key="index">
-          <circle :cx="12 + (690/stepCount) * value" cy="12" r="10" :class="{ 'fill-black': currentStep >= value }" />
-          <path v-if="index < stepCount" :d="'M' + (24 + (690/stepCount) * value) + ' 12H' + ((690/stepCount) + (690/stepCount) * value)" />
+          <circle :cx="12 + (680/stepCount) * value" cy="12" r="10" :class="{ 'fill-black': currentStep >= value }" />
+          <path v-if="index < stepCount" :d="'M' + (24 + (680/stepCount) * value) + ' 12H' + ((680/stepCount) + (680/stepCount) * value)" />
         </g>
       </svg>
       <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">{{ steps[currentStep].title }}</h1>
@@ -21,8 +21,8 @@
           {{ steps[currentStep].description }}
         </p>
       </div>
-      <div class="bottom-0 absolute inset-x-0 flex justify-between p-8 lg:p-16">
-        <button :onClick="prevStep" class="uppercase font-sng font-medium text-black bg-wall rounded-full text-2xl py-4 px-10 flex">
+      <div class="bottom-0 absolute inset-x-0 flex justify-between p-6 lg:p-16">
+        <button :onClick="prevStep" class="uppercase font-sng font-medium text-black bg-wall rounded-full text-lg lg:text-2xl py-4 px-10 flex">
           <svg class="h-[27px] w-[23px] fill-black mr-3" viewBox="0 0 27 23">
             <path
               d="M12.0085 22.9999L0.553955 11.5454L12.0085 0.0908203L13.9773 2.034L5.87214 10.1391H26.8636V12.9516H5.87214L13.9773 21.0312L12.0085 22.9999Z"
@@ -30,7 +30,7 @@
           </svg>
           Späť
         </button>
-        <button :onClick="nextStep" class="uppercase font-sng font-medium text-white bg-black rounded-full text-2xl py-4 px-10 flex">
+        <button :onClick="nextStep" class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex">
           Ďalej
           <svg class="h-[27px] w-[23px] fill-white ml-3" viewBox="0 0 27 23">
             <path

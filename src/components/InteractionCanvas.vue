@@ -1,5 +1,5 @@
 <template>
-  <div id="stencilCanvas" ref="sketchContainer" class="w-full h-full min-h-[500px]"></div>
+  <div id="stencilCanvas" ref="sketchContainer" class="w-full h-full min-h-[350px]"></div>
 </template>
 
 <script setup>

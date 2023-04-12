@@ -205,7 +205,7 @@ onMounted(() => {
         const circleSize = handleSize * 0.65
         p5.fill(this.colorFill)
         
-        if (p5.lightness(this.colorFill) < 50) {
+        if (p5.lightness(this.colorFill) < 20) {
           p5.stroke(220)
           p5.strokeWeight(2)
         }
@@ -218,7 +218,7 @@ onMounted(() => {
           circleSize
         )
         p5.fill(0)
-        if (p5.lightness(this.colorFill) < 50) {
+        if (p5.lightness(this.colorFill) < 20) {
           p5.fill(220) 
         }
         p5.textSize(28)

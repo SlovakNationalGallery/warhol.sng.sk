@@ -204,6 +204,12 @@ onMounted(() => {
         )
         const circleSize = handleSize * 0.65
         p5.fill(this.colorFill)
+        
+        if (p5.lightness(this.colorFill) < 50) {
+          p5.stroke(220)
+          p5.strokeWeight(2)
+        }
+
         p5.rect(
           this.stencil.x + this.stencil.width / 2 - circleSize / 2,
           this.stencil.y + this.progress + (handleSize - circleSize) / 2,
@@ -212,6 +218,9 @@ onMounted(() => {
           circleSize
         )
         p5.fill(0)
+        if (p5.lightness(this.colorFill) < 50) {
+          p5.fill(220) 
+        }
         p5.textSize(28)
         p5.textAlign(p5.CENTER, p5.TOP)
         p5.text("↓", this.stencil.x + this.stencil.width / 2, this.stencil.y + this.progress + (handleSize - circleSize) / 1.2)

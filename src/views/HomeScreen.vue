@@ -10,7 +10,7 @@
       class="font-sng px-4 py-4 xl:py-8 hover:text-green group text-white bg-black text-3xl 2xl:text-6xl font-medium block text-center w-100"
     >
       Vytvor si vlastnú polievku
-      <svg viewBox="0 0 63 52" class="w-8 2xl:w-14 h-auto fill-none stroke-white group-hover:stroke-green inline-block ml-2">
+      <svg viewBox="0 0 63 52" class="w-8 2xl:w-14 h-auto fill-none stroke-white group-hover:stroke-green inline-block ml-4 2xl:ml-6 animate-bounce">
         <path d="M0 26H59" stroke-width="6" />
         <path d="M35 49L58 26L35 3" stroke-width="6" />
       </svg>

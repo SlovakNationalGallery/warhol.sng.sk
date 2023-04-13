@@ -1,26 +1,28 @@
 <template>
-  <div class="w-full h-full bg-wall lg:flex">
+  <div class="w-full h-full bg-wall lg:flex select-none xl:overscroll-none xl:touch-pan-y">
     <div class="lg:h-full bg-white lg:w-3/5">
-      <InteractionCanvas :current-step="currentStep" :step-count="stepCount" />
+      <InteractionCanvas :current-step="currentStep" :step-count="stepCount" :label-string="labelString" />
     </div>
-    <div class="p-8 lg:p-16 lg:w-2/5 min-h-screen bg-wall relative">
-      <div class="mb-5 text-xl">
+    <div class="p-6 lg:p-16 lg:w-2/5 lg:min-h-screen bg-wall relative">
+      <div class="mb-5 text-xl xl:text-2xl">
         krok <b>{{ currentStep + 1 }} / {{ stepCount }}</b>
       </div>
       <svg class="w-100 h-auto fill-none stroke-black stroke-[4px] mb-8 lg:mb-16" viewBox="0 0 660 24">
         <g v-for="(index, value) in stepCount" :key="index">
-          <circle :cx="12 + 159 * value" cy="12" r="10" :class="{ 'fill-black': currentStep >= value }" />
-          <path :d="'M' + (24 + 159 * value) + ' 12H' + (159 + 159 * value)" />
+          <circle :cx="12 + (680/stepCount) * value" cy="12" r="10" :class="{ 'fill-black': currentStep >= value }" />
+          <path v-if="index < stepCount" :d="'M' + (24 + (680/stepCount) * value) + ' 12H' + ((680/stepCount) + (680/stepCount) * value)" />
         </g>
       </svg>
       <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">{{ steps[currentStep].title }}</h1>
-      <div class="text-xl pb-20">
-        <p class="mb-4">
+      <div class="text-xl xl:text-2xl pb-20">
+        <input v-if="stepCount - 2 === currentStep"  v-model="labelString" class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4 lg:mb-8" type="text" placeholder="Enter text">
+
+        <p class="mb-4 whitespace-pre-wrap">
           {{ steps[currentStep].description }}
         </p>
       </div>
-      <div class="bottom-0 absolute inset-x-0 flex justify-between p-8 lg:p-16">
-        <button :onClick="prevStep" class="uppercase font-sng font-medium text-black bg-wall rounded-full text-2xl py-4 px-10 flex">
+      <div class="bottom-0 absolute inset-x-0 flex justify-between p-6 lg:p-16">
+        <button :onClick="prevStep" class="uppercase font-sng font-medium text-black bg-wall rounded-full text-lg lg:text-2xl py-4 px-10 flex">
           <svg class="h-[27px] w-[23px] fill-black mr-3" viewBox="0 0 27 23">
             <path
               d="M12.0085 22.9999L0.553955 11.5454L12.0085 0.0908203L13.9773 2.034L5.87214 10.1391H26.8636V12.9516H5.87214L13.9773 21.0312L12.0085 22.9999Z"
@@ -28,7 +30,7 @@
           </svg>
           Späť
         </button>
-        <button :onClick="nextStep" class="uppercase font-sng font-medium text-white bg-black rounded-full text-2xl py-4 px-10 flex">
+        <button :onClick="nextStep" class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex">
           Ďalej
           <svg class="h-[27px] w-[23px] fill-white ml-3" viewBox="0 0 27 23">
             <path
@@ -45,32 +47,104 @@ import { ref } from "vue"
 import { useRouter } from "vue-router"
 import InteractionCanvas from "../components/InteractionCanvas.vue"
 
+const labelString = ref('');
 const currentStep = ref(0)
 const router = useRouter()
-const stepCount = 5
-
 const steps = [
   {
-    title: "Prilož a zarovnaj šablónu",
-    description: "This is the first step",
+    title: "Priložte a zarovnajte šablónu",
+    description: `Cambellova polievka od Andyho Warhola bola vytvorená technikou sieťotlače (serigrafia). Na jej vytvorenie boli použité viaceré šablóny, na každú farbu jedna. 
+    
+Tu si ju môžete vyskúšať jej jednotlivé kroky. 
+
+Najskôr umiestnite šablónu na vopred označené orezové značky. Presné zarovnanie prvej šablóny je veľmi dôležité, pretože vytvára základ pre celé dielo a zabezpečí presné umiestnenie farieb.
+` ,
   },
   {
-    title: "Nanes stierkou farbu",
-    description: "This is the second step",
+    title: "Naneste stierkou červenú farbu",
+    description: `V tomto kroku autor rovnomerným tlakom prenášal farbu na plátno. 
+    
+Pomocou stierky rozotrite červenú farbu po šablóne, čím napodobníte Warholovu ikonickú techniku.
+
+Červená je prvou nanášanou farbou, pretože je na veľkej ploche diela.
+    `,
   },
   {
-    title: "Zrovnaj ďaľšiu šaplónu",
-    description: "This is the third step",
+    title: "Priložte a zarovnajte ďaľšiu šablónu",
+    description:  `Grafiku je treba po každom nátere odložiť, aby zaschla a bola pripravená na ďalšiu vrstvu. A šablónu po nanesení farby okamžite vyčistiť.  
+
+V tejto simulácii však môžeme hneď pokračovať...
+
+Opatrne zarovnajte ďaľšiu šablónu. Skúste uhádnuť, akú farbu budeme nanášať teraz... Na poradí farieb záleží. Viete odhadnúť, v akom poradí by mali nasledovať?
+    `,
   },
   {
-    title: "Opäť nanes stierkou farbu",
-    description: "This is the third step",
+    title: "Naneste stierkou sivú farbu",
+    description: `Warhol začal používať sieťotlač ako médium pre svoje diela, pretože ho fascinovala myšlienka masovej výroby a automatizácie.
+
+Priťahovali ho predmety každodennej potreby a ikonické značky, ktoré boli rozšírené v americkej spoločnosti a snažil sa ich zakomponovať do svojich umeleckých diel.
+
+Prostredníctvom sieťotlače mohol Warhol vytvárať umelecké diela, ktoré sa dali reprodukovať vo veľkých množstvách, čím sa stali dostupnejšími pre širšie publikum.
+    `,
+  },
+  {
+    title: "Priložte a zarovnajte šablónu",
+    description: `Technikou sieťotlače vznikajú diela, ktoré sa na prvý pohľad môžu javiť rovnaké, avšak sú tu vždy prítomné drobné odchýlky. 
+
+Aj vďaka nim dostávajú punc rukodielnej práce umelca. 
+    `,
+  },
+  {
+    title: "Naneste stierkou bielu farbu",
+    description: `V kontexte sieťotlače nie je stanovené žiadne striktné pravidlo, ktoré by definovalo presný počet výtlačkov považovaných za "originálne umelecké dielo". 
+
+Počet originálov sa môže líšiť v závislosti od rôznych faktorov, ako je umelecký zámer, umelecké konvencie a právne predpisy. 
+
+Konkrétny počet výtlačkov v edícii sa často určuje na základe rozhodnutia umelca alebo dohody s galériou.
+    `,
+  },
+  {
+    title: "Priložte a zarovnajte šablónu",
+    description: `Na trhu s umením sa limitované edície sieťotlačí zvyčajne pohybujú od niekoľkých výtlačkov po niekoľko stoviek výtlačkov, pričom každý výtlačok je podpísaný a očíslovaný umelcom. `,
+  },
+  {
+    title: "Naneste stierkou zlatú farbu",
+    description: `Môžeme sa len domnievať, ako by Andy Warhol pristúpil k súčastným technológiam. 
+
+V jednom z rozhovorov zo 60. rokov však na otázku, ako by sa vyrovnal s výzvou automatizácie odpovedal: 
+"Tým, že sa stanem jej súčasťou." 
+    `,
+  },
+  {
+    title: "Zarovnaj poslednú šablónu",
+    description:  `Úlohou tejto šablóny je okrem iného prekryť drobné nedokonalosti a zjedniť plochy.`,
+  },
+  {
+    title: "Naneste stierkou čiernu farbu",
+    description: `Čierna farba slúži ako záverečná vrstva. Dodáva dielu hĺbku a kontrast, zvýrazňuje obrysy a zvyšuje jeho vizuálny účinok.`,
+  },
+  {
+    title: "Akú polievku si dáte dnes?",
+    description: `Andy Warhol dopisoval názvy polievok ručne. Každá sa volala inak. Pravdepodobne ich všetky dobre poznal, konzumloval ich totiž každý deň.
+ 
+Vpíšte sem názov vašej obľúbenej polievky.     
+    `,
   },
   {
     title: "Hotovo?",
-    description: "This is the third step",
+    description: `Grafika je vytlačená. Čas na poslednú kontrolu kvality. Vyzerá to skutočne tak, ako ste chceli? 
+
+Ak áno, nastal by čas ju orezať, podpísať a zarámovať...
+
+Ak je vaše dielo v poriadku, môžete ho pridať do našej zbierky.
+    
+Ak treba niečo zmeniť, posunúť či napraviť - v realite by ste museli začať odznova. Tu sa však v každom kroku môžete vrátiť späť.
+    `,
   },
 ]
+
+const stepCount = steps.length
+
 
 const nextStep = () => {
   currentStep.value += 1

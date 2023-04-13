@@ -2,6 +2,13 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: "./",
+  chainWebpack: (config) => {
+    config.module.rule("images").set("parser", {
+      dataUrlCondition: {
+        maxSize: 40 * 1024, // 40KiB
+      },
+    })
+  },
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true,

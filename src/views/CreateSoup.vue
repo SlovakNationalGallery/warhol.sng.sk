@@ -136,10 +136,10 @@ Vpíšte sem názov vašej obľúbenej polievky.
 
 Ak áno, nastal by čas ju orezať, podpísať a zarámovať...
 
-Ak je vaše dielo v poriadku, môžete ho pridať do našej zbierky.
-    
 Ak treba niečo zmeniť, posunúť či napraviť - v realite by ste museli začať odznova. Tu sa však v každom kroku môžete vrátiť späť.
-    `,
+
+Andy Warhol vystavoval Cambellove polievky vždy v sériách. Ak je vaše dielo v poriadku, môžete ho pridať do našej zbierky. 
+`,
   },
 ]
 

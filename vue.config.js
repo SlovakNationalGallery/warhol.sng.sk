@@ -5,7 +5,7 @@ module.exports = defineConfig({
   chainWebpack: (config) => {
     config.module.rule("images").set("parser", {
       dataUrlCondition: {
-        maxSize: 40 * 1024, // 40KiB
+        maxSize: 50 * 1024, // 50KiB
       },
     })
   },

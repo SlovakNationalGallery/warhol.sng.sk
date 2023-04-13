@@ -5,6 +5,7 @@ module.exports = defineConfig({
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true,
+      customFileProtocol: "./",
       productName: "Warhol App",
       appId: "sk.sng.warhol",
       mac: {

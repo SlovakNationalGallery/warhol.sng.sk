@@ -25,6 +25,15 @@ module.exports = {
       screens: {
         "2xl": "1800px",
       },
+      animation: {
+        bounce: "bounce 1s infinite",
+      },
+      keyframes: {
+        bounce: {
+          "0%, 100%": { transform: "translateX(-25%)" },
+          "50%": { ttransform: "translateX(0)" },
+        },
+      },
     },
   },
   plugins: [],

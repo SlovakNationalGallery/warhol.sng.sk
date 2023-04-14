@@ -38,6 +38,7 @@
             />
           </svg>
         </button>
+        <button @click="saveCanvas" class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex">Save Canvas</button>
       </div>
     </div>
   </div>
@@ -47,6 +48,7 @@ import { ref } from "vue"
 import { useRouter } from "vue-router"
 import InteractionCanvas from "../components/InteractionCanvas.vue"
 
+const savedImages = ref([]);
 const labelString = ref('');
 const currentStep = ref(0)
 const router = useRouter()
@@ -159,5 +161,25 @@ const prevStep = () => {
   if (currentStep.value < 0) {
     router.push("/")
   }
+}
+
+const saveCanvas = () => {
+  const c = document.getElementById("defaultCanvas0")
+  // const ctx = c.getContext("2d");
+  // const { width, height } = c;
+  const dataUrl = c.toDataURL();
+  const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
+  console.log(base64Data);
+
+  const buffer = Buffer.from(base64Data, 'base64');
+  const fileName = `canvas_${Date.now()}.png`; // Use a dynamic filename with a timestamp
+  console.log(fileName);
+
+  // Use Electron's built-in "fs" module to save the image locally
+  require('fs').writeFileSync(fileName, buffer);
+
+  // Add the saved image to the gallery
+  savedImages.value.push(fileName);
+
 }
 </script>

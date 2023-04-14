@@ -47,6 +47,8 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import InteractionCanvas from "../components/InteractionCanvas.vue"
+import fs from 'fs';
+import path from 'path';
 
 const savedImages = ref([]);
 const labelString = ref('');
@@ -165,18 +167,23 @@ const prevStep = () => {
 
 const saveCanvas = () => {
   const c = document.getElementById("defaultCanvas0")
-  // const ctx = c.getContext("2d");
-  // const { width, height } = c;
   const dataUrl = c.toDataURL();
   const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
-  console.log(base64Data);
 
   const buffer = Buffer.from(base64Data, 'base64');
   const fileName = `canvas_${Date.now()}.png`; // Use a dynamic filename with a timestamp
   console.log(fileName);
 
+  const saveDir = 'saved_cans' //path.join(__dirname, 'saved_cans'); // Specify the subdirectory
+
+  // Check if the save directory exists, create it if it doesn't
+  if (!fs.existsSync(saveDir)) {
+    fs.mkdirSync(saveDir);
+  }
+
   // Use Electron's built-in "fs" module to save the image locally
-  require('fs').writeFileSync(fileName, buffer);
+  const filePath = path.join(saveDir, fileName);
+  fs.writeFileSync(filePath, buffer);
 
   // Add the saved image to the gallery
   savedImages.value.push(fileName);

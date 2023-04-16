@@ -228,26 +228,22 @@ const cropCanvas = () => {
   showCropped.value = true
 
   context.value = croppedCanvasRef.value?.getContext("2d") || undefined
-
-  croppedCanvasRef.value.width = interactionCanvasRef.value.printCanvas.width
-  croppedCanvasRef.value.height = interactionCanvasRef.value.printCanvas.height
-
+  
   const c = document.getElementById("defaultCanvas0")
-
   const width = interactionCanvasRef.value.printCanvas.width
   const height = interactionCanvasRef.value.printCanvas.height
-
   const startX = interactionCanvasRef.value.interactionCanvas.width - width
   const startY = interactionCanvasRef.value.interactionCanvas.height - height
-
-  console.log(c.width)
+  const ratio = c.width / interactionCanvasRef.value.interactionCanvas.width
+  croppedCanvasRef.value.width = width
+  croppedCanvasRef.value.height = height
 
   context.value.drawImage(
     c,
     startX,
     startY,
-    width,
-    height, // source rect with content to crop
+    width*ratio,
+    height*ratio, // source rect with content to crop
     0,
     0,
     width,

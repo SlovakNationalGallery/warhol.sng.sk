@@ -397,29 +397,33 @@ onMounted(() => {
     }
 
     p5.showPrintMarkers = () => {
+      const markersStrokeWeight = 2
       p5.fill(255)
       p5.stroke(0)
-      const offset = 30
-      p5.rectMode(p5.CORNER)
+      p5.strokeWeight(markersStrokeWeight)
+      const offset = 40
+      p5.rectMode(p5.CENTER)
       p5.rect(
-        (p5.width - printCanvas.value.width) / 2,
-        (p5.height - printCanvas.value.height) / 2,
-        printCanvas.value.width,
-        printCanvas.value.height
+        p5.width / 2,
+        p5.height / 2,
+        // print markers are strictly outside the cropping arrea
+        printCanvas.value.width + markersStrokeWeight,
+        printCanvas.value.height + markersStrokeWeight
       )
       p5.noStroke()
       p5.rect(
-        (p5.width - printCanvas.value.width) / 2 + offset / 2,
-        (p5.height - printCanvas.value.height) / 2 - offset / 2,
+        p5.width / 2,
+        p5.height / 2,
         printCanvas.value.width - offset,
         printCanvas.value.height + offset
       )
       p5.rect(
-        (p5.width - printCanvas.value.width) / 2 - offset / 2,
-        (p5.height - printCanvas.value.height) / 2 + offset / 2,
+        p5.width / 2,
+        p5.height / 2,
         printCanvas.value.width + offset,
         printCanvas.value.height - offset
       )
+      p5.rectMode(p5.CORNER)
     }
   }
   new p5(script, sketchContainer.value)

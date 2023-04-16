@@ -58,24 +58,12 @@
             />
           </svg>
         </button>
-        <button
-          @click="saveCanvas"
-          class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex hidden"
-        >
-          Save Canvas
-        </button>
-        <button
-          @click="cropCanvas"
-          class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex"
-        >
-          Crop Canvas
-        </button>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import InteractionCanvas from "../components/InteractionCanvas.vue"
 import fs from "fs"
@@ -187,8 +175,10 @@ const stepCount = steps.length
 
 const nextStep = () => {
   currentStep.value += 1
-  if (currentStep.value >= stepCount) {
-    // @todo confirm and save
+  if (currentStep.value == stepCount - 1) {
+    cropCanvas()
+  } else if (currentStep.value >= stepCount) {
+    saveCanvas()
     router.push("/")
   }
 }
@@ -204,7 +194,7 @@ const prevStep = () => {
 }
 
 const saveCanvas = () => {
-  const c = document.getElementById("defaultCanvas0")
+  const c = croppedCanvasRef.value
   const dataUrl = c.toDataURL()
   const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "")
 
@@ -212,7 +202,7 @@ const saveCanvas = () => {
   const fileName = `canvas_${Date.now()}.png` // Use a dynamic filename with a timestamp
   console.log(fileName)
 
-  const saveDir = "saved_cans" //path.join(__dirname, 'saved_cans'); // Specify the subdirectory
+  const saveDir = "saved_cans"
 
   // Check if the save directory exists, create it if it doesn't
   if (!fs.existsSync(saveDir)) {
@@ -230,8 +220,6 @@ const saveCanvas = () => {
 const cropCanvas = () => {
   showCropped.value = true
 
-  context.value = croppedCanvasRef.value?.getContext("2d") || undefined
-  
   const c = document.getElementById("defaultCanvas0")
   const width = interactionCanvasRef.value.printCanvas.width
   const height = interactionCanvasRef.value.printCanvas.height
@@ -255,10 +243,12 @@ const cropCanvas = () => {
 }
 
 const clearCanvas = () => {
-  context.value = croppedCanvasRef.value?.getContext("2d") || undefined
   context.value.clearRect(0, 0, context.value.canvas.width, context.value.canvas.height)
   showCropped.value = false
 }
 
+onMounted(() => {
+    context.value = croppedCanvasRef.value?.getContext("2d") || undefined
+});
 
 </script>

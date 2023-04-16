@@ -51,7 +51,7 @@
           :onClick="nextStep"
           class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex"
         >
-          Ďalej
+          {{ (isLastStep()) ? 'Uložiť' : 'Ďalej' }}
           <svg class="h-[27px] w-[23px] fill-white ml-3" viewBox="0 0 27 23">
             <path
               d="M14.9913 8.96454e-05L26.4458 11.4546L14.9913 22.9092L13.0225 20.966L21.1276 12.8609L0.136141 12.8609V10.0484L21.1276 10.0484L13.0225 1.96884L14.9913 8.96454e-05Z"
@@ -175,7 +175,7 @@ const stepCount = steps.length
 
 const nextStep = () => {
   currentStep.value += 1
-  if (currentStep.value == stepCount - 1) {
+  if (isLastStep()) {
     cropCanvas()
   } else if (currentStep.value >= stepCount) {
     saveCanvas()
@@ -245,6 +245,10 @@ const cropCanvas = () => {
 const clearCanvas = () => {
   context.value.clearRect(0, 0, context.value.canvas.width, context.value.canvas.height)
   showCropped.value = false
+}
+
+const isLastStep = () => {
+  return (currentStep.value == stepCount - 1)
 }
 
 onMounted(() => {

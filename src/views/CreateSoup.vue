@@ -194,6 +194,9 @@ const nextStep = () => {
 }
 
 const prevStep = () => {
+  if (showCropped.value === true) {
+    clearCanvas()
+  }
   currentStep.value -= 1
   if (currentStep.value < 0) {
     router.push("/")
@@ -250,4 +253,12 @@ const cropCanvas = () => {
     height
   )
 }
+
+const clearCanvas = () => {
+  context.value = croppedCanvasRef.value?.getContext("2d") || undefined
+  context.value.clearRect(0, 0, context.value.canvas.width, context.value.canvas.height)
+  showCropped.value = false
+}
+
+
 </script>

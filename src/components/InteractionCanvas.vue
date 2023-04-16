@@ -25,20 +25,23 @@ const state = reactive({
   story: [],
 })
 
+const printCanvas = ref({})
+const interactionCanvas = ref({})
+
 let prevStep = 0
 
 onMounted(() => {
   // NOTE: Use p5 as an instance mode
 
   const script = function (p5) {
-    const P5_CANVAS = {
+    interactionCanvas.value = {
       width: document.getElementById("stencilCanvas").offsetWidth,
       height: document.getElementById("stencilCanvas").offsetHeight,
     }
 
-    const SCREEN_PRINT_CANVAS = {
-      width: (CAN.height / CAN.width) * (P5_CANVAS.height - P5_CANVAS.width / 6),
-      height: P5_CANVAS.height - P5_CANVAS.width / 6,
+    printCanvas.value = {
+      width: (CAN.height / CAN.width) * (interactionCanvas.value.height - interactionCanvas.value.width / 6),
+      height: interactionCanvas.value.height - interactionCanvas.value.width / 6,
     }
 
     class DraggableItem {
@@ -63,15 +66,15 @@ onMounted(() => {
           const newPosY = p5.mouseY - this.offSetY
           if (newPosX < 0) {
             this.x = 0
-          } else if (newPosX + this.width > P5_CANVAS.width) {
-            this.x = P5_CANVAS.width - this.width
+          } else if (newPosX + this.width > interactionCanvas.value.width) {
+            this.x = interactionCanvas.value.width - this.width
           } else {
             this.x = newPosX
           }
           if (newPosY < 0) {
             this.y = 0
-          } else if (newPosY + this.height > P5_CANVAS.height) {
-            this.y = P5_CANVAS.height - this.height
+          } else if (newPosY + this.height > interactionCanvas.value.height) {
+            this.y = interactionCanvas.value.height - this.height
           } else {
             this.y = newPosY
           }
@@ -233,8 +236,8 @@ onMounted(() => {
       const redStencil = new Stencil({
         x: 0,
         y: 0,
-        width: SCREEN_PRINT_CANVAS.width,
-        height: SCREEN_PRINT_CANVAS.height,
+        width: printCanvas.value.width,
+        height: printCanvas.value.height,
         fill: 100,
         image: p5.loadImage(require("@/assets/can/0_red.png")),
         stencilImage: p5.loadImage(require("@/assets/can/0_red_stencil.png")),
@@ -242,8 +245,8 @@ onMounted(() => {
       const grayStencil = new Stencil({
         x: 0,
         y: 0,
-        width: SCREEN_PRINT_CANVAS.width,
-        height: SCREEN_PRINT_CANVAS.height,
+        width: printCanvas.value.width,
+        height: printCanvas.value.height,
         fill: 100,
         image: p5.loadImage(require("@/assets/can/1_gray.png")),
         stencilImage: p5.loadImage(require("@/assets/can/1_gray_stencil.png")),
@@ -251,8 +254,8 @@ onMounted(() => {
       const whiteStencil = new Stencil({
         x: 0,
         y: 0,
-        width: SCREEN_PRINT_CANVAS.width,
-        height: SCREEN_PRINT_CANVAS.height,
+        width: printCanvas.value.width,
+        height: printCanvas.value.height,
         fill: 100,
         image: p5.loadImage(require("@/assets/can/2_white.png")),
         stencilImage: p5.loadImage(require("@/assets/can/2_white_stencil.png")),
@@ -260,8 +263,8 @@ onMounted(() => {
       const goldStencil = new Stencil({
         x: 0,
         y: 0,
-        width: SCREEN_PRINT_CANVAS.width,
-        height: SCREEN_PRINT_CANVAS.height,
+        width: printCanvas.value.width,
+        height: printCanvas.value.height,
         fill: 100,
         image: p5.loadImage(require("@/assets/can/3_gold.png")),
         stencilImage: p5.loadImage(require("@/assets/can/3_gold_stencil.png")),
@@ -269,8 +272,8 @@ onMounted(() => {
       const blackStencil = new Stencil({
         x: 0,
         y: 0,
-        width: SCREEN_PRINT_CANVAS.width,
-        height: SCREEN_PRINT_CANVAS.height,
+        width: printCanvas.value.width,
+        height: printCanvas.value.height,
         fill: 100,
         image: p5.loadImage(require("@/assets/can/4_black.png")),
         stencilImage: p5.loadImage(require("@/assets/can/4_black_stencil.png")),
@@ -322,8 +325,8 @@ onMounted(() => {
           shape: new Label({
             x: 0,
             y: 0,
-            width: SCREEN_PRINT_CANVAS.width * 0.7,
-            height: SCREEN_PRINT_CANVAS.height * 0.2,
+            width: printCanvas.value.width * 0.7,
+            height: printCanvas.value.height * 0.2,
             fill: p5.color("#B93645"),
             text: "",
             stencil: blackStencil,
@@ -349,7 +352,7 @@ onMounted(() => {
     }
     // NOTE: Set up is here
     p5.setup = () => {
-      const canvas = p5.createCanvas(P5_CANVAS.width, P5_CANVAS.height)
+      const canvas = p5.createCanvas(interactionCanvas.value.width, interactionCanvas.value.height)
       canvas.parent("stencilCanvas")
     }
 
@@ -365,11 +368,11 @@ onMounted(() => {
 
         p5.rectMode(p5.CENTER)
         p5.fill("#F6F3ED")
-        p5.rect(p5.width / 2, p5.height / 2, SCREEN_PRINT_CANVAS.width + 20, SCREEN_PRINT_CANVAS.height + 20)
+        p5.rect(p5.width / 2, p5.height / 2, printCanvas.value.width + 20, printCanvas.value.height + 20)
         p5.fill(255)
-        p5.rect(p5.width / 2, p5.height / 2, SCREEN_PRINT_CANVAS.width, SCREEN_PRINT_CANVAS.height)
+        p5.rect(p5.width / 2, p5.height / 2, printCanvas.value.width, printCanvas.value.height)
 
-        p5.rect(p5.width / 2, p5.height / 2, SCREEN_PRINT_CANVAS.width, SCREEN_PRINT_CANVAS.height)
+        p5.rect(p5.width / 2, p5.height / 2, printCanvas.value.width, printCanvas.value.height)
         p5.rectMode(p5.CORNER)
         p5.drawingContext.clip()
       }
@@ -399,28 +402,34 @@ onMounted(() => {
       const offset = 30
       p5.rectMode(p5.CORNER)
       p5.rect(
-        (p5.width - SCREEN_PRINT_CANVAS.width) / 2,
-        (p5.height - SCREEN_PRINT_CANVAS.height) / 2,
-        SCREEN_PRINT_CANVAS.width,
-        SCREEN_PRINT_CANVAS.height
+        (p5.width - printCanvas.value.width) / 2,
+        (p5.height - printCanvas.value.height) / 2,
+        printCanvas.value.width,
+        printCanvas.value.height
       )
       p5.noStroke()
       p5.rect(
-        (p5.width - SCREEN_PRINT_CANVAS.width) / 2 + offset / 2,
-        (p5.height - SCREEN_PRINT_CANVAS.height) / 2 - offset / 2,
-        SCREEN_PRINT_CANVAS.width - offset,
-        SCREEN_PRINT_CANVAS.height + offset
+        (p5.width - printCanvas.value.width) / 2 + offset / 2,
+        (p5.height - printCanvas.value.height) / 2 - offset / 2,
+        printCanvas.value.width - offset,
+        printCanvas.value.height + offset
       )
       p5.rect(
-        (p5.width - SCREEN_PRINT_CANVAS.width) / 2 - offset / 2,
-        (p5.height - SCREEN_PRINT_CANVAS.height) / 2 + offset / 2,
-        SCREEN_PRINT_CANVAS.width + offset,
-        SCREEN_PRINT_CANVAS.height - offset
+        (p5.width - printCanvas.value.width) / 2 - offset / 2,
+        (p5.height - printCanvas.value.height) / 2 + offset / 2,
+        printCanvas.value.width + offset,
+        printCanvas.value.height - offset
       )
     }
   }
   new p5(script, sketchContainer.value)
 })
+
+defineExpose({
+  printCanvas,
+  interactionCanvas
+})
+
 </script>
 
 <style scoped>

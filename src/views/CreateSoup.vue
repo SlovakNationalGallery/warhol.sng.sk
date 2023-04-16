@@ -1,7 +1,12 @@
 <template>
   <div class="w-full h-full bg-wall lg:flex select-none xl:overscroll-none xl:touch-pan-y">
-    <div class="lg:h-full bg-white lg:w-3/5">
-      <InteractionCanvas :current-step="currentStep" :step-count="stepCount" :label-string="labelString" />
+    <div class="lg:h-full bg-white lg:w-3/5 relative">
+      <InteractionCanvas :current-step="currentStep" :step-count="stepCount" :label-string="labelString" ref="interactionCanvasRef" />
+      <div class="bg-wall absolute inset-0 items-center justify-center" id="confirmPreview" :class="showCropped ? 'flex' : 'hidden'">
+        <div class="bg-white p-2.5 border-wall drop-shadow-3xl border-[14px] rounded-sm flex">
+          <canvas id="croppedCanvas" ref="croppedCanvasRef"></canvas>
+        </div>
+      </div>
     </div>
     <div class="p-6 lg:p-16 lg:w-2/5 lg:min-h-screen bg-wall relative">
       <div class="mb-5 text-xl xl:text-2xl">
@@ -9,20 +14,32 @@
       </div>
       <svg class="w-100 h-auto fill-none stroke-black stroke-[4px] mb-8 lg:mb-16" viewBox="0 0 660 24">
         <g v-for="(index, value) in stepCount" :key="index">
-          <circle :cx="12 + (680/stepCount) * value" cy="12" r="10" :class="{ 'fill-black': currentStep >= value }" />
-          <path v-if="index < stepCount" :d="'M' + (24 + (680/stepCount) * value) + ' 12H' + ((680/stepCount) + (680/stepCount) * value)" />
+          <circle :cx="12 + (680 / stepCount) * value" cy="12" r="10" :class="{ 'fill-black': currentStep >= value }" />
+          <path
+            v-if="index < stepCount"
+            :d="'M' + (24 + (680 / stepCount) * value) + ' 12H' + (680 / stepCount + (680 / stepCount) * value)"
+          />
         </g>
       </svg>
       <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">{{ steps[currentStep].title }}</h1>
       <div class="text-xl xl:text-2xl pb-20">
-        <input v-if="stepCount - 2 === currentStep"  v-model="labelString" class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4 lg:mb-8" type="text" placeholder="Enter text">
+        <input
+          v-if="stepCount - 2 === currentStep"
+          v-model="labelString"
+          class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4 lg:mb-8"
+          type="text"
+          placeholder="Enter text"
+        />
 
         <p class="mb-4 whitespace-pre-wrap">
           {{ steps[currentStep].description }}
         </p>
       </div>
       <div class="bottom-0 absolute inset-x-0 flex justify-between p-6 lg:p-16">
-        <button :onClick="prevStep" class="uppercase font-sng font-medium text-black bg-wall rounded-full text-lg lg:text-2xl py-4 px-10 flex">
+        <button
+          :onClick="prevStep"
+          class="uppercase font-sng font-medium text-black bg-wall rounded-full text-lg lg:text-2xl py-4 px-10 flex"
+        >
           <svg class="h-[27px] w-[23px] fill-black mr-3" viewBox="0 0 27 23">
             <path
               d="M12.0085 22.9999L0.553955 11.5454L12.0085 0.0908203L13.9773 2.034L5.87214 10.1391H26.8636V12.9516H5.87214L13.9773 21.0312L12.0085 22.9999Z"
@@ -30,7 +47,10 @@
           </svg>
           Späť
         </button>
-        <button :onClick="nextStep" class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex">
+        <button
+          :onClick="nextStep"
+          class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex"
+        >
           Ďalej
           <svg class="h-[27px] w-[23px] fill-white ml-3" viewBox="0 0 27 23">
             <path
@@ -38,7 +58,18 @@
             />
           </svg>
         </button>
-        <button @click="saveCanvas" class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex">Save Canvas</button>
+        <button
+          @click="saveCanvas"
+          class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex hidden"
+        >
+          Save Canvas
+        </button>
+        <button
+          @click="cropCanvas"
+          class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex"
+        >
+          Crop Canvas
+        </button>
       </div>
     </div>
   </div>
@@ -47,27 +78,32 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import InteractionCanvas from "../components/InteractionCanvas.vue"
-import fs from 'fs';
-import path from 'path';
+import fs from "fs"
+import path from "path"
 
-const savedImages = ref([]);
-const labelString = ref('');
+const croppedCanvasRef = ref(null)
+const context = ref(null)
+const interactionCanvasRef = ref(null)
+const showCropped = ref(false)
+
+const savedImages = ref([])
+const labelString = ref("")
 const currentStep = ref(0)
 const router = useRouter()
 const steps = [
   {
     title: "Priložte a zarovnajte šablónu",
-    description: `Cambellova polievka od Andyho Warhola bola vytvorená technikou sieťotlače (serigrafia). Na jej vytvorenie boli použité viaceré šablóny, na každú farbu jedna. 
-    
-Tu si ju môžete vyskúšať jej jednotlivé kroky. 
+    description: `Cambellova polievka od Andyho Warhola bola vytvorená technikou sieťotlače (serigrafia). Na jej vytvorenie boli použité viaceré šablóny, na každú farbu jedna.
+
+Tu si môžete vyskúšať jej jednotlivé kroky.
 
 Najskôr umiestnite šablónu na vopred označené orezové značky. Presné zarovnanie prvej šablóny je veľmi dôležité, pretože vytvára základ pre celé dielo a zabezpečí presné umiestnenie farieb.
-` ,
+`,
   },
   {
     title: "Naneste stierkou červenú farbu",
-    description: `V tomto kroku autor rovnomerným tlakom prenášal farbu na plátno. 
-    
+    description: `V tomto kroku autor rovnomerným tlakom prenášal farbu na plátno.
+
 Pomocou stierky rozotrite červenú farbu po šablóne, čím napodobníte Warholovu ikonickú techniku.
 
 Červená je prvou nanášanou farbou, pretože je na veľkej ploche diela.
@@ -75,7 +111,7 @@ Pomocou stierky rozotrite červenú farbu po šablóne, čím napodobníte Warho
   },
   {
     title: "Priložte a zarovnajte ďaľšiu šablónu",
-    description:  `Grafiku je treba po každom nátere odložiť, aby zaschla a bola pripravená na ďalšiu vrstvu. A šablónu po nanesení farby okamžite vyčistiť.  
+    description: `Grafiku je treba po každom nátere odložiť, aby zaschla a bola pripravená na ďalšiu vrstvu. A šablónu po nanesení farby okamžite vyčistiť.
 
 V tejto simulácii však môžeme hneď pokračovať...
 
@@ -93,16 +129,16 @@ Prostredníctvom sieťotlače mohol Warhol vytvárať umelecké diela, ktoré sa
   },
   {
     title: "Priložte a zarovnajte šablónu",
-    description: `Technikou sieťotlače vznikajú diela, ktoré sa na prvý pohľad môžu javiť rovnaké, avšak sú tu vždy prítomné drobné odchýlky. 
+    description: `Technikou sieťotlače vznikajú diela, ktoré sa na prvý pohľad môžu javiť rovnaké, avšak sú tu vždy prítomné drobné odchýlky.
 
-Aj vďaka nim dostávajú punc rukodielnej práce umelca. 
+Aj vďaka nim dostávajú punc rukodielnej práce umelca.
     `,
   },
   {
     title: "Naneste stierkou bielu farbu",
-    description: `V kontexte sieťotlače nie je stanovené žiadne striktné pravidlo, ktoré by definovalo presný počet výtlačkov považovaných za "originálne umelecké dielo". 
+    description: `V kontexte sieťotlače nie je stanovené žiadne striktné pravidlo, ktoré by definovalo presný počet výtlačkov považovaných za "originálne umelecké dielo".
 
-Počet originálov sa môže líšiť v závislosti od rôznych faktorov, ako je umelecký zámer, umelecké konvencie a právne predpisy. 
+Počet originálov sa môže líšiť v závislosti od rôznych faktorov, ako je umelecký zámer, umelecké konvencie a právne predpisy.
 
 Konkrétny počet výtlačkov v edícii sa často určuje na základe rozhodnutia umelca alebo dohody s galériou.
     `,
@@ -113,15 +149,15 @@ Konkrétny počet výtlačkov v edícii sa často určuje na základe rozhodnuti
   },
   {
     title: "Naneste stierkou zlatú farbu",
-    description: `Môžeme sa len domnievať, ako by Andy Warhol pristúpil k súčastným technológiam. 
+    description: `Môžeme sa len domnievať, ako by Andy Warhol pristúpil k súčastným technológiam.
 
-V jednom z rozhovorov zo 60. rokov však na otázku, ako by sa vyrovnal s výzvou automatizácie odpovedal: 
-"Tým, že sa stanem jej súčasťou." 
+V jednom z rozhovorov zo 60. rokov však na otázku, ako by sa vyrovnal s výzvou automatizácie odpovedal:
+"Tým, že sa stanem jej súčasťou."
     `,
   },
   {
     title: "Zarovnaj poslednú šablónu",
-    description:  `Úlohou tejto šablóny je okrem iného prekryť drobné nedokonalosti a zjedniť plochy.`,
+    description: `Úlohou tejto šablóny je okrem iného prekryť drobné nedokonalosti a zjedniť plochy.`,
   },
   {
     title: "Naneste stierkou čiernu farbu",
@@ -130,25 +166,24 @@ V jednom z rozhovorov zo 60. rokov však na otázku, ako by sa vyrovnal s výzvo
   {
     title: "Akú polievku si dáte dnes?",
     description: `Andy Warhol dopisoval názvy polievok ručne. Každá sa volala inak. Pravdepodobne ich všetky dobre poznal, konzumloval ich totiž každý deň.
- 
-Vpíšte sem názov vašej obľúbenej polievky.     
+
+Vpíšte sem názov vašej obľúbenej polievky.
     `,
   },
   {
     title: "Hotovo?",
-    description: `Grafika je vytlačená. Čas na poslednú kontrolu kvality. Vyzerá to skutočne tak, ako ste chceli? 
+    description: `Grafika je vytlačená. Čas na poslednú kontrolu kvality. Vyzerá to skutočne tak, ako ste chceli?
 
 Ak áno, nastal by čas ju orezať, podpísať a zarámovať...
 
 Ak treba niečo zmeniť, posunúť či napraviť - v realite by ste museli začať odznova. Tu sa však v každom kroku môžete vrátiť späť.
 
-Andy Warhol vystavoval Cambellove polievky vždy v sériách. Ak je vaše dielo v poriadku, môžete ho pridať do našej zbierky. 
+Andy Warhol vystavoval Cambellove polievky vždy v sériách. Ak je vaše dielo v poriadku, môžete ho pridať do našej zbierky.
 `,
   },
 ]
 
 const stepCount = steps.length
-
 
 const nextStep = () => {
   currentStep.value += 1
@@ -167,26 +202,56 @@ const prevStep = () => {
 
 const saveCanvas = () => {
   const c = document.getElementById("defaultCanvas0")
-  const dataUrl = c.toDataURL();
-  const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
+  const dataUrl = c.toDataURL()
+  const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "")
 
-  const buffer = Buffer.from(base64Data, 'base64');
-  const fileName = `canvas_${Date.now()}.png`; // Use a dynamic filename with a timestamp
-  console.log(fileName);
+  const buffer = Buffer.from(base64Data, "base64")
+  const fileName = `canvas_${Date.now()}.png` // Use a dynamic filename with a timestamp
+  console.log(fileName)
 
-  const saveDir = 'saved_cans' //path.join(__dirname, 'saved_cans'); // Specify the subdirectory
+  const saveDir = "saved_cans" //path.join(__dirname, 'saved_cans'); // Specify the subdirectory
 
   // Check if the save directory exists, create it if it doesn't
   if (!fs.existsSync(saveDir)) {
-    fs.mkdirSync(saveDir);
+    fs.mkdirSync(saveDir)
   }
 
   // Use Electron's built-in "fs" module to save the image locally
-  const filePath = path.join(saveDir, fileName);
-  fs.writeFileSync(filePath, buffer);
+  const filePath = path.join(saveDir, fileName)
+  fs.writeFileSync(filePath, buffer)
 
   // Add the saved image to the gallery
-  savedImages.value.push(fileName);
+  savedImages.value.push(fileName)
+}
 
+const cropCanvas = () => {
+  showCropped.value = true
+
+  context.value = croppedCanvasRef.value?.getContext("2d") || undefined
+
+  croppedCanvasRef.value.width = interactionCanvasRef.value.printCanvas.width
+  croppedCanvasRef.value.height = interactionCanvasRef.value.printCanvas.height
+
+  const c = document.getElementById("defaultCanvas0")
+
+  const width = interactionCanvasRef.value.printCanvas.width
+  const height = interactionCanvasRef.value.printCanvas.height
+
+  const startX = interactionCanvasRef.value.interactionCanvas.width - width
+  const startY = interactionCanvasRef.value.interactionCanvas.height - height
+
+  console.log(c.width)
+
+  context.value.drawImage(
+    c,
+    startX,
+    startY,
+    width,
+    height, // source rect with content to crop
+    0,
+    0,
+    width,
+    height
+  )
 }
 </script>

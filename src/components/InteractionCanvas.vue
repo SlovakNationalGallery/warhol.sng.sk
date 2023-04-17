@@ -361,22 +361,6 @@ onMounted(() => {
       p5.background(255)
       p5.showPrintMarkers()
 
-      p5.drawingContext.save()
-
-      if (state.story[props.currentStep].story_step === STORY_STEP.CONFIRM) {
-        p5.background("#F2F0EA")
-
-        p5.rectMode(p5.CENTER)
-        p5.fill("#F6F3ED")
-        p5.rect(p5.width / 2, p5.height / 2, printCanvas.value.width + 20, printCanvas.value.height + 20)
-        p5.fill(255)
-        p5.rect(p5.width / 2, p5.height / 2, printCanvas.value.width, printCanvas.value.height)
-
-        p5.rect(p5.width / 2, p5.height / 2, printCanvas.value.width, printCanvas.value.height)
-        p5.rectMode(p5.CORNER)
-        p5.drawingContext.clip()
-      }
-
       state.story.map((item, index) => {
         if (item.story_step === STORY_STEP.LABEL && index < props.currentStep) {
           item.shape.display()
@@ -393,7 +377,6 @@ onMounted(() => {
         }
         state.story[props.currentStep].shape.display()
       }
-      p5.drawingContext.restore()
     }
 
     p5.showPrintMarkers = () => {

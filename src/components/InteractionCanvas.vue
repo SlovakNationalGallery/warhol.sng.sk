@@ -3,7 +3,6 @@
 </template>
 
 <script setup>
-/*eslint-disable*/
 import { onMounted, ref, reactive, defineProps } from "vue"
 import p5 from "p5"
 

@@ -124,17 +124,51 @@ onMounted(() => {
       display() {
         this.text = props.labelString
         const x = this.stencil.x + this.stencil.width / 2
-        const y = this.stencil.y + this.stencil.height * 0.71
+        const y = this.stencil.y * 1.5
 
-        p5.rectMode(p5.CENTER)
+        const chars = this.text.split("")
+        const radius = P5_CANVAS.width / 2
+        // Decide an angle
+        const charSpacingAngleDeg = -5
+
+        p5.textAlign(p5.CENTER, p5.BASELINE)
         p5.noStroke()
         p5.fill(this.fill)
         p5.textAlign(p5.CENTER, p5.CENTER)
         p5.textSize(this.height * 0.35)
         p5.textStyle(p5.BOLD)
-        p5.text(this.text.toUpperCase(), x, y, this.width, this.height)
-        p5.strokeWeight(1)
-        p5.rectMode(p5.CORNER)
+
+        // https://p5js.org/reference/#/p5/push
+        // Save the current translation matrix so it can be reset
+        // before the end of the function
+        p5.push()
+
+        // Let's first move to the center of the circle
+        p5.translate(x, y)
+
+        // First rotate half back so that middle char will come in the center
+        p5.rotate(p5.radians(((-chars.length * charSpacingAngleDeg) / 2) + charSpacingAngleDeg / 2))
+
+        for (let i = 0; i < chars.length; i++) {
+          p5.text(chars[i], 0, radius)
+
+          // Then keep rotating forward per character
+          p5.rotate(p5.radians(charSpacingAngleDeg))
+        }
+
+        // Reset all translations we did since the last push() call
+        // so anything we draw after this isn't affected
+        p5.pop()
+
+        // p5.rectMode(p5.CENTER)
+        // p5.noStroke()
+        // p5.fill(this.fill)
+        // p5.textAlign(p5.CENTER, p5.CENTER)
+        // p5.textSize(this.height * 0.35)
+        // p5.textStyle(p5.BOLD)
+        // p5.text(this.text.toUpperCase(), x, y, this.width, this.height)
+        // p5.strokeWeight(1)
+        // p5.rectMode(p5.CORNER)
       }
     }
 

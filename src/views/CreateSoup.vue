@@ -200,8 +200,6 @@ const saveCanvas = () => {
 
   const buffer = Buffer.from(base64Data, "base64")
   const fileName = `canvas_${Date.now()}.png` // Use a dynamic filename with a timestamp
-  console.log(fileName)
-
   const saveDir = "saved_cans"
 
   // Check if the save directory exists, create it if it doesn't

@@ -23,16 +23,12 @@
       </svg>
       <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">{{ steps[currentStep].title }}</h1>
       <div class="text-xl xl:text-2xl pb-20">
-        <input
-          v-if="stepCount - 2 === currentStep"
-          v-model="labelString"
-          class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4 lg:mb-8"
-          type="text"
-          placeholder="Enter text"
-        />
-
+        <div class="pb-10"  v-if="stepCount - 2 === currentStep">
+          <input :value="labelString" class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4 lg:mb-8" type="text" placeholder="Enter text">
+          <VirtualKeyboard :input="labelString" @onChange="onLabelStringChange"/>
+        </div>
         <p class="mb-4 whitespace-pre-wrap">
-          {{ steps[currentStep].description }}
+          {{ steps[currentStep].description }} 
         </p>
       </div>
       <div class="bottom-0 absolute inset-x-0 flex justify-between p-6 lg:p-16">
@@ -66,6 +62,7 @@
 import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import InteractionCanvas from "../components/InteractionCanvas.vue"
+import VirtualKeyboard from "../components/VirtualKeyboard.vue";
 import fs from "fs"
 import path from "path"
 
@@ -170,6 +167,10 @@ Andy Warhol vystavoval Cambellove polievky vždy v sériách. Ak je vaše dielo 
 `,
   },
 ]
+
+const onLabelStringChange = (newLabelString) => {
+  labelString.value = newLabelString
+}
 
 const stepCount = steps.length
 

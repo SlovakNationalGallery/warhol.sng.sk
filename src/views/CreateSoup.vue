@@ -185,13 +185,14 @@ const nextStep = () => {
 }
 
 const prevStep = () => {
+  if (currentStep.value <= 0) {
+    router.push("/")
+    return
+  }
   if (showCropped.value === true) {
     clearCanvas()
   }
   currentStep.value -= 1
-  if (currentStep.value < 0) {
-    router.push("/")
-  }
 }
 
 const saveCanvas = () => {
@@ -222,8 +223,8 @@ const cropCanvas = () => {
   const c = document.getElementById("defaultCanvas0")
   const width = interactionCanvasRef.value.printCanvas.width
   const height = interactionCanvasRef.value.printCanvas.height
-  const startX = interactionCanvasRef.value.interactionCanvas.width - width
-  const startY = interactionCanvasRef.value.interactionCanvas.height - height
+  const startX = (interactionCanvasRef.value.interactionCanvas.width- width) / 2
+  const startY = (interactionCanvasRef.value.interactionCanvas.height - height) / 2
   const ratio = c.width / interactionCanvasRef.value.interactionCanvas.width
   croppedCanvasRef.value.width = width
   croppedCanvasRef.value.height = height

@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive, defineProps } from "vue"
+import { onMounted, ref, reactive, defineProps, defineExpose } from "vue"
 import p5 from "p5"
 
 const STORY_STEP = {

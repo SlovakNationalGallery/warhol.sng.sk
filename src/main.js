@@ -1,5 +1,5 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue"
+import App from "./App.vue"
 import { createRouter, createWebHashHistory } from "vue-router"
 // import VueRouter from "vue-router";
 import HomeScreen from "./views/HomeScreen.vue"
@@ -22,6 +22,26 @@ const router = createRouter({
   routes,
 })
 
-const app = createApp(App);
-app.use(router);
-app.mount("#app");
+const app = createApp(App)
+app.use(router)
+app.mount("#app")
+
+;(function () {
+  const idleDurationSecs = 60
+  const redirectUrl = "/"
+  let idleTimeout
+
+  const resetIdleTimeout = function () {
+    if (idleTimeout) clearTimeout(idleTimeout)
+    idleTimeout = setTimeout(function () {
+      console.log("redirect")
+      location.href = redirectUrl
+    }, idleDurationSecs * 1000)
+  }
+
+  // init on page load
+  resetIdleTimeout()
+
+  // reset the idle timeout on any of the events listed below
+  ;["click", "touchstart", "mousemove"].forEach((evt) => document.addEventListener(evt, resetIdleTimeout, false))
+})()

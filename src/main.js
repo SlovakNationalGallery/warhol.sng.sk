@@ -34,7 +34,6 @@ app.mount("#app")
   const resetIdleTimeout = function () {
     if (idleTimeout) clearTimeout(idleTimeout)
     idleTimeout = setTimeout(function () {
-      console.log("redirect")
       location.href = redirectUrl
     }, idleDurationSecs * 1000)
   }

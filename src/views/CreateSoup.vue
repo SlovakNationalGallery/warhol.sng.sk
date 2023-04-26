@@ -78,7 +78,7 @@ const router = useRouter()
 const steps = [
   {
     title: "Priložte a zarovnajte šablónu",
-    description: `Cambellova polievka od Andyho Warhola bola vytvorená technikou sieťotlače (serigrafia). Na jej vytvorenie boli použité viaceré šablóny, na každú farbu jedna.
+    description: `Campbellova polievka od Andyho Warhola bola vytvorená technikou sieťotlače (serigrafie). Na jej vytvorenie boli použité viaceré šablóny, na každú farbu jedna.
 
 Tu si môžete vyskúšať jej jednotlivé kroky.
 
@@ -95,54 +95,54 @@ Pomocou stierky rozotrite červenú farbu po šablóne, čím napodobníte Warho
     `,
   },
   {
-    title: "Priložte a zarovnajte ďaľšiu šablónu",
-    description: `Grafiku je treba po každom nátere odložiť, aby zaschla a bola pripravená na ďalšiu vrstvu. A šablónu po nanesení farby okamžite vyčistiť.
+    title: "Priložte a zarovnajte ďalšiu šablónu",
+    description: `Grafiku je treba po každom nátere odložiť, aby zaschla a bola pripravená na ďalšiu vrstvu. A šablónu je potrebné po nanesení farby okamžite vyčistiť.
 
-V tejto simulácii však môžeme hneď pokračovať...
+V tejto simulácii však môžeme hneď pokračovať.
 
-Opatrne zarovnajte ďaľšiu šablónu. Skúste uhádnuť, akú farbu budeme nanášať teraz... Na poradí farieb záleží. Viete odhadnúť, v akom poradí by mali nasledovať?
+Opatrne zarovnajte ďalšiu šablónu. Skúste uhádnuť, akú farbu budeme nanášať teraz. Na poradí farieb záleží. Viete odhadnúť, v akej postupnosti by mali nasledovať?
     `,
   },
   {
     title: "Naneste stierkou sivú farbu",
     description: `Warhol začal používať sieťotlač ako médium pre svoje diela, pretože ho fascinovala myšlienka masovej výroby a automatizácie.
 
-Priťahovali ho predmety každodennej potreby a ikonické značky, ktoré boli rozšírené v americkej spoločnosti a snažil sa ich zakomponovať do svojich umeleckých diel.
+Priťahovali ho predmety každodennej potreby a ikonické značky, ktoré boli rozšírené v americkej spoločnosti, a snažil sa ich zakomponovať do svojich umeleckých diel.
 
 Prostredníctvom sieťotlače mohol Warhol vytvárať umelecké diela, ktoré sa dali reprodukovať vo veľkých množstvách, čím sa stali dostupnejšími pre širšie publikum.
     `,
   },
   {
     title: "Priložte a zarovnajte šablónu",
-    description: `Technikou sieťotlače vznikajú diela, ktoré sa na prvý pohľad môžu javiť rovnaké, avšak sú tu vždy prítomné drobné odchýlky.
+    description: `Technikou sieťotlače vznikajú diela, ktoré sa na prvý pohľad môžu javiť rovnaké, avšak vždy sú tu prítomné drobné odchýlky.
 
 Aj vďaka nim dostávajú punc rukodielnej práce umelca.
     `,
   },
   {
     title: "Naneste stierkou bielu farbu",
-    description: `V kontexte sieťotlače nie je stanovené žiadne striktné pravidlo, ktoré by definovalo presný počet výtlačkov považovaných za "originálne umelecké dielo".
+    description: `V kontexte sieťotlače nie je stanovené žiadne striktné pravidlo, ktoré by definovalo presný počet výtlačkov považovaných za „originálne umelecké dielo“.
 
 Počet originálov sa môže líšiť v závislosti od rôznych faktorov, ako je umelecký zámer, umelecké konvencie a právne predpisy.
 
-Konkrétny počet výtlačkov v edícii sa často určuje na základe rozhodnutia umelca alebo dohody s galériou.
+Konkrétny počet výtlačkov v edícii sa často určuje na základe rozhodnutia umelca či umelkyne alebo dohody s galériou.
     `,
   },
   {
     title: "Priložte a zarovnajte šablónu",
-    description: `Na trhu s umením sa limitované edície sieťotlačí zvyčajne pohybujú od niekoľkých výtlačkov po niekoľko stoviek výtlačkov, pričom každý výtlačok je podpísaný a očíslovaný umelcom. `,
+    description: `Na trhu s umením sa limitované edície sieťotlačí zvyčajne pohybujú od niekoľkých výtlačkov až po niekoľko stoviek, pričom každý výtlačok je podpísaný a očíslovaný umelcom, umelkyňou. `,
   },
   {
     title: "Naneste stierkou zlatú farbu",
-    description: `Môžeme sa len domnievať, ako by Andy Warhol pristúpil k súčastným technológiam.
+    description: `Môžeme sa len domnievať, ako by Andy Warhol pristúpil k súčasným technológiám.
 
-V jednom z rozhovorov zo 60. rokov však na otázku, ako by sa vyrovnal s výzvou automatizácie odpovedal:
-"Tým, že sa stanem jej súčasťou."
+V jednom z rozhovorov zo 60. rokov však na otázku, ako by sa vyrovnal s výzvou automatizácie, odpovedal:
+„Tým, že sa stanem jej súčasťou.“
     `,
   },
   {
     title: "Zarovnaj poslednú šablónu",
-    description: `Úlohou tejto šablóny je okrem iného prekryť drobné nedokonalosti a zjedniť plochy.`,
+    description: `Úlohou tejto šablóny je okrem iného prekryť drobné nedokonalosti a zjednotiť plochy.`,
   },
   {
     title: "Naneste stierkou čiernu farbu",
@@ -150,20 +150,20 @@ V jednom z rozhovorov zo 60. rokov však na otázku, ako by sa vyrovnal s výzvo
   },
   {
     title: "Akú polievku si dáte dnes?",
-    description: `Andy Warhol dopisoval názvy polievok ručne. Každá sa volala inak. Pravdepodobne ich všetky dobre poznal, konzumloval ich totiž každý deň.
+    description: `Andy Warhol dopisoval názvy polievok ručne. Každá sa volala inak. Pravdepodobne ich všetky dobre poznal, konzumoval ich totiž každý deň.
 
-Vpíšte sem názov vašej obľúbenej polievky.
+Vpíšte sem názov svojej obľúbenej polievky.
     `,
   },
   {
     title: "Hotovo?",
     description: `Grafika je vytlačená. Čas na poslednú kontrolu kvality. Vyzerá to skutočne tak, ako ste chceli?
 
-Ak áno, nastal by čas ju orezať, podpísať a zarámovať...
+Ak áno, nastal by čas orezať ju, podpísať a zarámovať...
 
-Ak treba niečo zmeniť, posunúť či napraviť - v realite by ste museli začať odznova. Tu sa však v každom kroku môžete vrátiť späť.
+Ak treba niečo zmeniť, posunúť či napraviť, v realite by ste museli začať odznova. Tu sa však v každom kroku môžete vrátiť späť.
 
-Andy Warhol vystavoval Cambellove polievky vždy v sériách. Ak je vaše dielo v poriadku, môžete ho pridať do našej zbierky.
+Andy Warhol vystavoval Campbellove polievky vždy v sériách. Ak je vaše dielo v poriadku, môžete ho pridať do našej zbierky.
 `,
   },
 ]

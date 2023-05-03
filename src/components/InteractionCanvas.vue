@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive, defineProps, defineExpose } from "vue"
+import { onMounted, onBeforeUnmount, ref, reactive, defineProps, defineExpose } from "vue"
 import p5 from "p5"
 
 const STORY_STEP = {
@@ -28,11 +28,12 @@ const printCanvas = ref({})
 const interactionCanvas = ref({})
 
 let prevStep = 0
+let p5Instance
 
 onMounted(() => {
   // NOTE: Use p5 as an instance mode
 
-  const script = function (p5) {
+  const sketch = function (p5) {
     interactionCanvas.value = {
       width: document.getElementById("stencilCanvas").offsetWidth,
       height: document.getElementById("stencilCanvas").offsetHeight,
@@ -393,29 +394,23 @@ onMounted(() => {
         printCanvas.value.height + markersStrokeWeight
       )
       p5.noStroke()
-      p5.rect(
-        p5.width / 2,
-        p5.height / 2,
-        printCanvas.value.width - offset,
-        printCanvas.value.height + offset
-      )
-      p5.rect(
-        p5.width / 2,
-        p5.height / 2,
-        printCanvas.value.width + offset,
-        printCanvas.value.height - offset
-      )
+      p5.rect(p5.width / 2, p5.height / 2, printCanvas.value.width - offset, printCanvas.value.height + offset)
+      p5.rect(p5.width / 2, p5.height / 2, printCanvas.value.width + offset, printCanvas.value.height - offset)
       p5.rectMode(p5.CORNER)
     }
   }
-  new p5(script, sketchContainer.value)
+  p5Instance = new p5(sketch, sketchContainer.value)
+})
+
+// Remove the p5.js instance when the component is unmounted
+onBeforeUnmount(() => {
+  p5Instance.remove()
 })
 
 defineExpose({
   printCanvas,
-  interactionCanvas
+  interactionCanvas,
 })
-
 </script>
 
 <style scoped>

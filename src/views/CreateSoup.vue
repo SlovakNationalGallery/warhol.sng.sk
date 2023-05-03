@@ -175,12 +175,14 @@ const onLabelStringChange = (newLabelString) => {
 const stepCount = steps.length
 
 const nextStep = () => {
+  if (currentStep.value >= stepCount-1) {
+    saveCanvas()
+    router.push("/")
+    return
+  }
   currentStep.value += 1
   if (isLastStep()) {
     cropCanvas()
-  } else if (currentStep.value >= stepCount) {
-    saveCanvas()
-    router.push("/")
   }
 }
 

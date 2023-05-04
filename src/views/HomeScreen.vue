@@ -1,6 +1,7 @@
 <template>
   <div class="w-full h-full bg-wall flex flex-col select-none xl:overscroll-none xl:touch-pan-y">
     <div
+      v-if="savedImages"
       class="grow grid grid-rows-5 grid-cols-2 lg:grid-cols-5 lg:grid-rows-2 gap-4 md:gap-x-14 md:gap-y-10 2xl:!gap-x-[120px] 2xl:!gap-y-[80px] w-full px-16 py-8 2xl:px-28 2xl:py-20"
     >
       <div
@@ -28,15 +29,19 @@
 </template>
 
 <script setup>
+
 import fs from "fs"
 import path from "path"
+import { ref, onMounted } from "vue"
 
-let savedImages = []
+const savedImages = ref(null);
 const saveDir = "saved_cans"
 
-const readSavedImages = () => {
+const readSavedImages = async () => {
   if (!process.env.IS_ELECTRON) {
-    // @todo call some api to get recent images
+    const response = await fetch(process.env.VUE_APP_API_URL);
+    const data = await response.json();
+    savedImages.value = data;
     return
   }
   if (fs.existsSync(saveDir)) {
@@ -46,11 +51,14 @@ const readSavedImages = () => {
       .sort()
       .reverse()
       .slice(0, 10)
-    savedImages = files.map((file) => path.join(saveDir, file))
+    savedImages.value = files.map((file) => path.join(saveDir, file))
   }
 }
 
 const getImageDataUrl = (imagePath) => {
+  if (!process.env.IS_ELECTRON) {
+    return imagePath;
+  }
   try {
     // Read the image file content in Base64 format
     const imageContent = fs.readFileSync(imagePath, { encoding: "base64" })
@@ -63,5 +71,6 @@ const getImageDataUrl = (imagePath) => {
   }
 }
 
-readSavedImages()
+onMounted(readSavedImages);
+
 </script>

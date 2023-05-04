@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-Route::middleware('throttle:20,1')->get('/images', function () {
+Route::middleware('throttle:10,1')->get('/images', function () {
     $images = collect(Storage::disk('public')->files('saved_cans'))
         ->filter(function ($path) {
             return Str::endsWith($path, '.png');
@@ -19,4 +19,17 @@ Route::middleware('throttle:20,1')->get('/images', function () {
         });
 
     return $images;
-}); //->domain('warhol.sng.sk');
+});
+
+
+Route::middleware('throttle:10,1')->post('/images', function (Request $request) {
+        $data = $request->validate([
+            'image' => ['required', 'string', 'max:500000', 'regex:/^data:image\/png;base64,/'],
+        ]);
+
+        // Save the image to the "saved_cans" folder with a filename containing the current timestamp
+        $filename = 'can_' . time() . '.png';
+        Storage::disk('public')->putFileAs('saved_cans', $data['image'], $filename);
+
+        return response()->json(['filename' => $filename]);
+})->middleware('validate-domain');

@@ -185,4 +185,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'allowed_domains' => explode(',', env('APP_ALLOWED_DOMAINS')),
+
 ];

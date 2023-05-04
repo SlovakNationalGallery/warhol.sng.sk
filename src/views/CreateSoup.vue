@@ -198,6 +198,10 @@ const prevStep = () => {
 }
 
 const saveCanvas = () => {
+  if (!process.env.IS_ELECTRON) {
+    // @todo post to API
+    return
+  }
   const c = croppedCanvasRef.value
   const dataUrl = c.toDataURL()
   const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "")

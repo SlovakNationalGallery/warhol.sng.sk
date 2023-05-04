@@ -23,12 +23,17 @@
       </svg>
       <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">{{ steps[currentStep].title }}</h1>
       <div class="text-xl xl:text-2xl pb-20">
-        <div class="pb-10"  v-if="stepCount - 2 === currentStep">
-          <input :value="labelString" class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4 lg:mb-8" type="text" placeholder="Enter text">
-          <VirtualKeyboard :input="labelString" @onChange="onLabelStringChange"/>
+        <div class="pb-10" v-if="stepCount - 2 === currentStep">
+          <input
+            :value="labelString"
+            class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4 lg:mb-8"
+            type="text"
+            placeholder="Enter text"
+          />
+          <VirtualKeyboard :input="labelString" @onChange="onLabelStringChange" />
         </div>
         <p class="mb-4 whitespace-pre-wrap">
-          {{ steps[currentStep].description }} 
+          {{ steps[currentStep].description }}
         </p>
       </div>
       <div class="bottom-0 absolute inset-x-0 flex justify-between p-6 lg:p-16">
@@ -47,7 +52,7 @@
           :onClick="nextStep"
           class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex"
         >
-          {{ (isLastStep()) ? 'Uložiť' : 'Ďalej' }}
+          {{ isLastStep() ? "Uložiť" : "Ďalej" }}
           <svg class="h-[27px] w-[23px] fill-white ml-3" viewBox="0 0 27 23">
             <path
               d="M14.9913 8.96454e-05L26.4458 11.4546L14.9913 22.9092L13.0225 20.966L21.1276 12.8609L0.136141 12.8609V10.0484L21.1276 10.0484L13.0225 1.96884L14.9913 8.96454e-05Z"
@@ -62,7 +67,7 @@
 import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import InteractionCanvas from "../components/InteractionCanvas.vue"
-import VirtualKeyboard from "../components/VirtualKeyboard.vue";
+import VirtualKeyboard from "../components/VirtualKeyboard.vue"
 import fs from "fs"
 import path from "path"
 
@@ -175,7 +180,7 @@ const onLabelStringChange = (newLabelString) => {
 const stepCount = steps.length
 
 const nextStep = () => {
-  if (currentStep.value >= stepCount-1) {
+  if (currentStep.value >= stepCount - 1) {
     saveCanvas()
     router.push("/")
     return
@@ -197,13 +202,22 @@ const prevStep = () => {
   currentStep.value -= 1
 }
 
-const saveCanvas = () => {
-  if (!process.env.IS_ELECTRON) {
-    // @todo post to API
-    return
-  }
+const saveCanvas = async () => {
   const c = croppedCanvasRef.value
   const dataUrl = c.toDataURL()
+
+  if (!process.env.IS_ELECTRON) {
+    const response = await fetch(process.env.VUE_APP_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ image: dataUrl }),
+    })
+    const data = await response.text()
+    return
+  }
+
   const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "")
 
   const buffer = Buffer.from(base64Data, "base64")
@@ -229,7 +243,7 @@ const cropCanvas = () => {
   const c = document.getElementById("defaultCanvas0")
   const width = interactionCanvasRef.value.printCanvas.width
   const height = interactionCanvasRef.value.printCanvas.height
-  const startX = (interactionCanvasRef.value.interactionCanvas.width- width) / 2
+  const startX = (interactionCanvasRef.value.interactionCanvas.width - width) / 2
   const startY = (interactionCanvasRef.value.interactionCanvas.height - height) / 2
   const ratio = c.width / interactionCanvasRef.value.interactionCanvas.width
   croppedCanvasRef.value.width = width
@@ -239,8 +253,8 @@ const cropCanvas = () => {
     c,
     startX,
     startY,
-    width*ratio,
-    height*ratio, // source rect with content to crop
+    width * ratio,
+    height * ratio, // source rect with content to crop
     0,
     0,
     width,
@@ -254,11 +268,10 @@ const clearCanvas = () => {
 }
 
 const isLastStep = () => {
-  return (currentStep.value == stepCount - 1)
+  return currentStep.value == stepCount - 1
 }
 
 onMounted(() => {
-    context.value = croppedCanvasRef.value?.getContext("2d") || undefined
-});
-
+  context.value = croppedCanvasRef.value?.getContext("2d") || undefined
+})
 </script>

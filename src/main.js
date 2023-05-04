@@ -25,7 +25,6 @@ const router = createRouter({
 const app = createApp(App)
 app.use(router)
 app.mount("#app")
-
 ;(function () {
   const idleDurationSecs = 60
   const redirectUrl = "/"
@@ -41,8 +40,9 @@ app.mount("#app")
   }
 
   // init on page load
-  resetIdleTimeout()
-
-  // reset the idle timeout on any of the events listed below
-  ;["click", "touchstart", "mousemove"].forEach((evt) => document.addEventListener(evt, resetIdleTimeout, false))
+  if (process.env.IS_ELECTRON) {
+    resetIdleTimeout()
+    // reset the idle timeout on any of the events listed below
+    ;["click", "touchstart", "mousemove"].forEach((evt) => document.addEventListener(evt, resetIdleTimeout, false))
+  }
 })()

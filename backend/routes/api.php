@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-Route::middleware('throttle:100,1')->get('/images', function () {
+Route::get('/images', function () {
     $images = collect(Storage::disk('public')->files('saved_cans'))
         ->filter(function ($path) {
             return Str::endsWith($path, '.png');
@@ -19,7 +19,7 @@ Route::middleware('throttle:100,1')->get('/images', function () {
         });
 
     return $images;
-});
+})->middleware('throttle:100,1');
 
 
 Route::middleware('throttle:10,1')->post('/images', function (Request $request) {

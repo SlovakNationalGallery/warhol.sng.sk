@@ -390,8 +390,8 @@ onMounted(() => {
         p5.width / 2,
         p5.height / 2,
         // print markers are strictly outside the cropping arrea
-        printCanvas.value.width + markersStrokeWeight,
-        printCanvas.value.height + markersStrokeWeight
+        printCanvas.value.width + markersStrokeWeight*2,
+        printCanvas.value.height + markersStrokeWeight*2
       )
       p5.noStroke()
       p5.rect(p5.width / 2, p5.height / 2, printCanvas.value.width - offset, printCanvas.value.height + offset)

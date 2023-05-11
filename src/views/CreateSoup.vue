@@ -251,8 +251,8 @@ const cropCanvas = () => {
 
   context.value.drawImage(
     c,
-    startX,
-    startY,
+    startX * ratio,
+    startY * ratio,
     width * ratio,
     height * ratio, // source rect with content to crop
     0,

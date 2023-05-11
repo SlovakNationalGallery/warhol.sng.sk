@@ -215,7 +215,7 @@ const saveCanvas = async () => {
       body: JSON.stringify({ image: dataUrl }),
     })
     const data = await response.text()
-    return
+    return data
   }
 
   const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "")

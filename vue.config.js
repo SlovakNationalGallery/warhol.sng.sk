@@ -1,7 +1,10 @@
-const { defineConfig } = require('@vue/cli-service')
+const { defineConfig } = require("@vue/cli-service")
 module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: "./",
+  devServer: {
+    proxy: process.env.VUE_APP_API_URL,
+  },
   chainWebpack: (config) => {
     config.module.rule("images").set("parser", {
       dataUrlCondition: {

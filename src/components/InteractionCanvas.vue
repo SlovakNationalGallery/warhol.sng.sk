@@ -134,7 +134,7 @@ onMounted(() => {
         p5.fill(this.fill)
         p5.textAlign(p5.CENTER, p5.CENTER)
         p5.textSize(this.height * 0.35)
-        p5.textStyle(p5.BOLD)
+        p5.textFont("Mukta");
         p5.text(this.text.toUpperCase(), x, y, this.width, this.height)
         p5.strokeWeight(1)
         p5.rectMode(p5.CORNER)

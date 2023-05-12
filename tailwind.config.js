@@ -7,6 +7,7 @@ module.exports = {
       fontFamily: {
         sans: ["Inter", ...defaultTheme.fontFamily.sans],
         sng: ["SNG Sans", ...defaultTheme.fontFamily.sans],
+        mukta: ["Mukta", ...defaultTheme.fontFamily.sans],
       },
       colors: {
         wall: {

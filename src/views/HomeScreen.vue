@@ -1,7 +1,7 @@
 <template>
-  <div class="w-full min-h-full bg-wall flex flex-col select-none xl:overscroll-none xl:touch-pan-y">
+  <div class="w-full min-h-full bg-wall flex flex-col select-none xl:overscroll-none xl:touch-pan-y" v-if="savedImages">
     <div
-      v-if="savedImages"
+      v-if="savedImages"  
       class="grow grid grid-rows-5 grid-cols-2 lg:grid-cols-5 lg:grid-rows-2 gap-4 md:gap-x-14 md:gap-y-10 2xl:!gap-x-[130px] 2xl:!gap-y-[50px] w-full px-16 md:px-24 py-6 2xl:px-44 2xl:py-14"
     >
       <div
@@ -11,6 +11,16 @@
       >
         <img :src="getImageDataUrl(image)" :alt="'Campbell\'s Soup ' + index" class="h-full w-auto mx-auto" width="218" height="330" />
       </div>
+    </div>
+    <div v-else class="grow items-center justify-center flex">
+      <svg class="animate-spin h-5 w-5 text-black m-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
     </div>
     <router-link
       to="/create-soup"

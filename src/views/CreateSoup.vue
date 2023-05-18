@@ -25,7 +25,7 @@
       <div class="text-xl 2xl:text-2xl pb-20">
         <div class="pb-6 2xl:pb-10" v-if="stepCount - 2 === currentStep">
           <input
-            :value="labelString"
+            v-model="labelString"
             class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4 md:mb-6 2xl:mb-8"
             type="text"
             placeholder="Enter text"

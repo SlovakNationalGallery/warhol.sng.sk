@@ -9,10 +9,10 @@
       </div>
     </div>
     <div class="p-6 lg:p-16 lg:w-2/5 lg:min-h-screen bg-wall relative">
-      <div class="mb-5 text-xl xl:text-2xl">
+      <div class="mb-5 text-xl 2xl:text-2xl">
         krok <b>{{ currentStep + 1 }} / {{ stepCount }}</b>
       </div>
-      <svg class="w-100 h-auto fill-none stroke-black stroke-[4px] mb-8 lg:mb-16" viewBox="0 0 660 24">
+      <svg class="w-100 h-auto fill-none stroke-black stroke-[4px] mb-8 2xl:mb-16" viewBox="0 0 660 24">
         <g v-for="(index, value) in stepCount" :key="index">
           <circle :cx="12 + (680 / stepCount) * value" cy="12" r="10" :class="{ 'fill-black': currentStep >= value }" />
           <path
@@ -21,12 +21,12 @@
           />
         </g>
       </svg>
-      <h1 class="mb-8 text-2xl lg:text-5xl font-bold font-sng">{{ steps[currentStep].title }}</h1>
-      <div class="text-xl xl:text-2xl pb-20">
-        <div class="pb-10" v-if="stepCount - 2 === currentStep">
+      <h1 class="mb-8 text-2xl md:text-4xl 2xl:text-5xl font-bold font-sng">{{ steps[currentStep].title }}</h1>
+      <div class="text-xl 2xl:text-2xl pb-20">
+        <div class="pb-6 2xl:pb-10" v-if="stepCount - 2 === currentStep">
           <input
-            :value="labelString"
-            class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4 lg:mb-8"
+            v-model="labelString"
+            class="border-b border-black focus:border-red focus:outline-none w-full py-2 px-3 mb-4 md:mb-6 2xl:mb-8"
             type="text"
             placeholder="Enter text"
           />
@@ -50,8 +50,17 @@
         </button>
         <button
           :onClick="nextStep"
+          :disabled="loading"
           class="uppercase font-sng font-medium text-white bg-black rounded-full text-lg lg:text-2xl py-4 px-10 flex"
         >
+          <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
           {{ isLastStep() ? "Uložiť" : "Ďalej" }}
           <svg class="h-[27px] w-[23px] fill-white ml-3" viewBox="0 0 27 23">
             <path
@@ -79,6 +88,8 @@ const showCropped = ref(false)
 const savedImages = ref([])
 const labelString = ref("")
 const currentStep = ref(0)
+const loading = ref(false)
+
 const router = useRouter()
 const steps = [
   {
@@ -154,11 +165,8 @@ V jednom z rozhovorov zo 60. rokov však na otázku, ako by sa vyrovnal s výzvo
     description: `Čierna farba slúži ako záverečná vrstva. Dodáva dielu hĺbku a kontrast, zvýrazňuje obrysy a zvyšuje jeho vizuálny účinok.`,
   },
   {
-    title: "Akú polievku si dáte dnes?",
-    description: `Andy Warhol dopisoval názvy polievok ručne. Každá sa volala inak. Pravdepodobne ich všetky dobre poznal, konzumoval ich totiž každý deň.
-
-Vpíšte sem názov svojej obľúbenej polievky.
-    `,
+    title: "Dajte svojej polievke názov",
+    description: `Andy Warhol dopisoval názvy polievok ručne. Zrejme všetky veľmi dobre poznal, jedol ich totiž každý deň.`,
   },
   {
     title: "Hotovo?",
@@ -179,9 +187,10 @@ const onLabelStringChange = (newLabelString) => {
 
 const stepCount = steps.length
 
-const nextStep = () => {
+const nextStep = async () => {
+  loading.value = true
   if (currentStep.value >= stepCount - 1) {
-    saveCanvas()
+    await saveCanvas()
     router.push("/")
     return
   }
@@ -189,6 +198,7 @@ const nextStep = () => {
   if (isLastStep()) {
     cropCanvas()
   }
+  loading.value = false
 }
 
 const prevStep = () => {
@@ -251,8 +261,8 @@ const cropCanvas = () => {
 
   context.value.drawImage(
     c,
-    startX,
-    startY,
+    startX * ratio,
+    startY * ratio,
     width * ratio,
     height * ratio, // source rect with content to crop
     0,

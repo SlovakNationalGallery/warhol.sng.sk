@@ -133,8 +133,8 @@ onMounted(() => {
         p5.noStroke()
         p5.fill(this.fill)
         p5.textAlign(p5.CENTER, p5.CENTER)
-        p5.textSize(this.height * 0.35)
-        p5.textStyle(p5.BOLD)
+        p5.textSize(this.height * 0.4)
+        p5.textFont("Mukta");
         p5.text(this.text.toUpperCase(), x, y, this.width, this.height)
         p5.strokeWeight(1)
         p5.rectMode(p5.CORNER)
@@ -390,8 +390,8 @@ onMounted(() => {
         p5.width / 2,
         p5.height / 2,
         // print markers are strictly outside the cropping arrea
-        printCanvas.value.width + markersStrokeWeight,
-        printCanvas.value.height + markersStrokeWeight
+        printCanvas.value.width + markersStrokeWeight*2,
+        printCanvas.value.height + markersStrokeWeight*2
       )
       p5.noStroke()
       p5.rect(p5.width / 2, p5.height / 2, printCanvas.value.width - offset, printCanvas.value.height + offset)

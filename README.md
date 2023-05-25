@@ -1,8 +1,6 @@
 # warhol.sng.sk
 
-![photo from the exhibition](/resources/exhibition-1.jpg?raw=true)
-
-![photo from the exhibition #2](/resources/exhibition-2.jpg?raw=true)
+![photo from the exhibition](/resources/exhibition.jpg?raw=true)
 
 warhol.sng.sk is a vue-cli + electron based app that complements the exhibition [Vidieť, vidieť a vidieť!](https://www.sng.sk/sk/vystavy/2454_vidiet-vidiet-a-vidiet)
  in the Slovak National Gallery in Zvolen.
